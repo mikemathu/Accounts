@@ -1,0 +1,167 @@
+﻿<div class=row>
+                                <div class=col-md-6>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading clearfix">
+                                            <h6 class=panel-title>
+                                                Account Details
+                                                <div class="btn-group pull-right">
+                                                    <button class="btn btn-info btn-xs dropdown-toggle" type=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>
+                                                        Actions <span class=caret></span>
+                                                    </button>
+                                                    <ul class=dropdown-menu>
+                                                        <li>
+                                                            <a href=# data-toggle=modal data-target=.configure-modal>Configure</a>
+                                                        <li>
+                                                            <a href=# data-toggle=modal data-target=.copy-accounts-modal>Copy Ledger Accounts</a>
+                                                        <li>
+                                                            <a href=javascript:TransferSubAccountBalance()>Transfer Sub Account Balance</a>
+                                                        <li>
+                                                            <a href=# data-toggle=modal data-target=.cashflow-categories-modal>Cash Flow Categories</a>
+                                                        <li>
+                                                            <a href=javascript:ChangeLedgerAccountNamesCase()>Change Ledger Account Names Case</a>
+                                                    </ul>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div class=panel-body>
+                                            <form method=post id=AccountForm>
+                                                <input hidden type=number data-val=true data-val-required="The AccountID field is required." id=Account_AccountID name=Account.AccountID>
+                                                <input value=1 hidden type=number data-val=true data-val-required="The CompanyBranchID field is required." id=Account_CompanyBranchID name=Account.CompanyBranchID>
+                                                <div class=row>
+                                                    <div class=col-md-6>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Account No</small>
+                                                            </label>
+                                                            <input type=number class="form-control input-sm" readonly data-val=true data-val-required="The AccountNo field is required." id=Account_AccountNo name=Account.AccountNo>
+                                                        </div>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Account Name</small>
+                                                            </label>
+                                                            <input class="form-control input-sm" required data-val=true data-val-required="The Name field is required." id=Account_Name name=Account.Name>
+                                                        </div>
+                                                    </div>
+                                                    <div class=col-md-6>
+                                                        <div class=form-group>
+                                                            <label class=control-label>
+                                                                <small>Account Class</small>
+                                                            </label>
+                                                            <div class=input-group>
+                                                                <select class="form-control input-sm select-account-class" style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_AccountClassID name=Account.AccountClassID>
+                                                                    <option value=0></option>
+                                                                </select>
+                                                                <span class=input-group-btn>
+                                                                    <a title="Add an account class" class="btn btn-link btn-sm" data-toggle=modal data-target=.add-accountclass-modal>
+                                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Cash Flow Category</small>
+                                                            </label>
+                                                            <select class="form-control input-sm" data-val=true data-val-required="The CashFlowCategoryID field is required." id=Account_CashFlowCategoryID name=Account.CashFlowCategoryID></select>
+                                                        </div>
+                                                        <div id=updateaccount hidden>
+                                                            <div class="btn-group btn-group-xs pull-right">
+                                                                <button id=btnupdateaccount class="btn btn-primary ladda-button" data-style=expand-right data-size=s>Update</button>
+                                                                <a id=btnCreateNewAccount class="btn btn-primary">New</a>
+                                                            </div>
+                                                        </div>
+                                                        <div id=addaccount>
+                                                            <button id=btnaddaccount class="btn btn-xs btn-primary pull-right ladda-button" data-style=expand-right data-size=s>
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input name=__RequestVerificationToken type=hidden value=CfDJ8It5D1qqI4lBjCCzFnB6CeqfglvO4yoFHZGMZv-GgSxEFw4rG-LxZBvxBS0OHal2GjdPrzXZ-47bJn3qsHTngmVteybGBsSEMuHJHTDRHfBDmeJBXgWCNn3N0goljfSAgEx1QzKX2OjzpFvhTpKv_NU94WRCgMS9XSDER8ElzVbPwLEIYsmNl47ZANZmElNhVQ>
+                                            </form>
+                                        </div>
+                                        <div class=panel-heading>
+                                            <h6 class=panel-title>View: Accounts</h6>
+                                        </div>
+                                        <div class=table-responsive id=no-more-tables>
+                                            <table class="col-md-12 table-striped table-condensed table-bordered cf compact" width=100% id=accountstable>
+                                                <thead class=cf>
+                                                    <tr>
+                                                        <th>
+                                                            <strong>No</strong>
+                                                        <th>
+                                                            <strong>Account Name</strong>
+                                                        <th>
+                                                            <strong>Account Class</strong>
+                                                            <tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=col-md-6>
+                                    <div class="panel panel-default">
+                                        <div class=panel-heading>
+                                            <h6 class=panel-title>Sub-Account Details</h6>
+                                        </div>
+                                        <div class=panel-body>
+                                            <form method=post id=SubAccountForm>
+                                                <input hidden type=number data-val=true data-val-required="The SubAccountID field is required." id=SubAccount_SubAccountID name=SubAccount.SubAccountID>
+                                                <div class=row>
+                                                    <div class=col-md-6>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Sub-Account Name</small>
+                                                            </label>
+                                                            <input class="form-control input-sm" required data-val=true data-val-required="The Name field is required." id=SubAccount_Name name=SubAccount.Name>
+                                                        </div>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Account</small>
+                                                            </label>
+                                                            <select class="form-control input-sm" required disabled data-val=true data-val-required="The AccountID field is required." id=SubAccount_AccountID name=SubAccount.AccountID></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class=col-md-6>
+                                                        <div class=form-group>
+                                                            <label>
+                                                                <small>Current balance</small>
+                                                            </label>
+                                                            <input type=number step=any class="form-control input-sm" readonly data-val=true data-val-number="The field CurrentBalance must be a number." data-val-required="The CurrentBalance field is required." id=SubAccount_CurrentBalance name=SubAccount.CurrentBalance>
+                                                        </div>
+                                                        <div id=updatesubacc hidden>
+                                                            <div class="btn-group btn-group-xs pull-right">
+                                                                <button id=btnupdatesubaccount class="btn btn-primary ladda-button" data-style=expand-right data-size=s>Update</button>
+                                                                <a id=btnCreateNewSubAccount class="btn btn-primary">New</a>
+                                                            </div>
+                                                        </div>
+                                                        <div id=addsubacc>
+                                                            <button id=btnaddsubaccount class="btn btn-primary btn-xs pull-right ladda-button" data-style=expand-right data-size=s>
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input name=__RequestVerificationToken type=hidden value=CfDJ8It5D1qqI4lBjCCzFnB6CeqfglvO4yoFHZGMZv-GgSxEFw4rG-LxZBvxBS0OHal2GjdPrzXZ-47bJn3qsHTngmVteybGBsSEMuHJHTDRHfBDmeJBXgWCNn3N0goljfSAgEx1QzKX2OjzpFvhTpKv_NU94WRCgMS9XSDER8ElzVbPwLEIYsmNl47ZANZmElNhVQ>
+                                            </form>
+                                        </div>
+                                        <div class=panel-heading>
+                                            <h6 class=panel-title>
+                                                View: Sub-Accounts (<span id=ForAcc class=text-info></span>
+                                                )
+                                            </h6>
+                                        </div>
+                                        <div class=table-responsive id=no-more-tables>
+                                            <table class="col-md-12 table-striped table-condensed table-bordered cf compact" width=100% id=subaccountstable>
+                                                <thead class=cf>
+                                                    <tr>
+                                                        <th>
+                                                            <strong>No</strong>
+                                                        <th>
+                                                            <strong>Name</strong>
+                                                        <th>
+                                                            <tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
