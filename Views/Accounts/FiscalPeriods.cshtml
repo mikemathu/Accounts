@@ -1,4 +1,6 @@
-﻿<div class=row>
+﻿@model Accounts.Models.VM.FiscalPeriodVMList
+
+<div class=row>
     <div class="panel panel-default">
         <div class=panel-heading>
             <h6 class=panel-title>Fiscal Period Details</h6>
@@ -76,8 +78,33 @@
                             <strong>Close Date</strong>
                         <th>
                             <strong>Is Active</strong>
+                            </th>
                         <th>
                             <strong>Is Open</strong>
+                        </th>
+                        </thead>
+                <tbody>
+                    @foreach (var item in Model.FiscalPeriodsList)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OpenDate)
+                            </td>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.CloseDate)
+                            </td>
+                             <td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsOpen)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
                 <tbody>
             </table>
         </div>

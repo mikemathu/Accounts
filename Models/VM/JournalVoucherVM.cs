@@ -1,6 +1,6 @@
-﻿namespace Accounts.Models
+﻿namespace Accounts.Models.VM
 {
-    public class JournalVoucher
+    public class JournalVoucherVM
     {
         public int Id { get; set; }
         public string SourceReference { get; set; }

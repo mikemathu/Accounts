@@ -1,12 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Accounts.Models.VM;
+using Accounts.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Accounts.Controllers
 {
     public class AccountsController : Controller
     {
-        public IActionResult FiscalPeriods()
+        /* public IActionResult FiscalPeriods()
+         {
+             return View();
+         }*/
+        private readonly IFiscalPeriods _fiscalperiodRepository;
+
+        public AccountsController(IFiscalPeriods fiscalPeriodsRepository)
         {
-            return View();
+            _fiscalperiodRepository = fiscalPeriodsRepository;
+        }
+        public async Task<IActionResult> FiscalPeriods()
+        {
+            var items = await _fiscalperiodRepository.GetFiscalPeriods();
+
+            FiscalPeriodVMList inventoryItems = new FiscalPeriodVMList()
+            {
+                FiscalPeriodsList = items,
+            };
+            return View(inventoryItems);
+
+            /*return NotFound();*/
         }
         public IActionResult GeneralLedgerAccounts()
         {

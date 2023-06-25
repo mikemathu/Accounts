@@ -1,13 +1,13 @@
-﻿namespace Accounts.Models
+﻿namespace Accounts.Models.VM
 {
-    public class AccountDetail
+    public class AccountDetailVM
     {
         public int Id { get; set; }
         public string AccountName { get; set; }
         public string AccountClass { get; set; }
         public string CashFlow { get; set; }
     }
-    public class SubAccountDetail
+    public class SubAccountDetailVM
     {
         public int Id { get; set; }
         public string Name { get; set; }
