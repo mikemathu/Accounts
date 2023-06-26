@@ -9,8 +9,12 @@ namespace Procurement.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-        }   
-     
+        }
+        static ApplicationDbContext()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+
         public DbSet<FiscalPeriod> fiscalperiods { get; set; }
         public DbSet<AccountDetail> AccountDetails { get; set; }
         public DbSet<SubAccountDetail> SubAccountDetails { get; set; }

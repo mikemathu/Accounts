@@ -2,7 +2,7 @@
 using Accounts.Services;
 using Npgsql;
 
-namespace Accounts.Repository
+namespace Accounts.Repositories
 {
     public class FiscalRepository : IFiscalPeriods
     {
@@ -51,9 +51,6 @@ namespace Accounts.Repository
             return fiscalPeriods;
         }
 
-       /* public Task<IEnumerable<FiscalPeriodVM>> GetFiscalPeriods()
-        {
-            throw new NotImplementedException();
-        }*/
+     
     }
 }

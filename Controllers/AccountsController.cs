@@ -1,6 +1,9 @@
 ﻿using Accounts.Models.VM;
 using Accounts.Services;
+using Accounts.Services.Command;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Accounts.Models;
 
 namespace Accounts.Controllers
 {
@@ -11,22 +14,38 @@ namespace Accounts.Controllers
              return View();
          }*/
         private readonly IFiscalPeriods _fiscalperiodRepository;
+        private readonly IFiscalPeriodCommands _fiscalperiodCommands;
+        private readonly IMapper _mapper;
 
-        public AccountsController(IFiscalPeriods fiscalPeriodsRepository)
+        public AccountsController(
+            IFiscalPeriods fiscalPeriodsRepository, 
+            IMapper mapper, 
+            IFiscalPeriodCommands fiscalperiodCommands)
         {
             _fiscalperiodRepository = fiscalPeriodsRepository;
+            _mapper = mapper;
+            _fiscalperiodCommands = fiscalperiodCommands;
         }
         public async Task<IActionResult> FiscalPeriods()
         {
             var items = await _fiscalperiodRepository.GetFiscalPeriods();
 
-            FiscalPeriodVMList inventoryItems = new FiscalPeriodVMList()
+            FiscalPeriodVM inventoryItems = new FiscalPeriodVM()
             {
                 FiscalPeriodsList = items,
             };
             return View(inventoryItems);
 
             /*return NotFound();*/
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> FiscalPeriods(FiscalPeriodVM fiscaldetails)
+        {
+            var fiscalPeriodId = _mapper.Map<FiscalPeriod>(fiscaldetails);
+            _fiscalperiodCommands.AddFiscalPeriod(fiscalPeriodId);
+            _fiscalperiodCommands.SaveChanges();
+            return RedirectToAction(nameof(FiscalPeriods));
         }
         public IActionResult GeneralLedgerAccounts()
         {

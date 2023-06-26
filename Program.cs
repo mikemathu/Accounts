@@ -1,9 +1,10 @@
-using Accounts.Repository;
+using Accounts.Repositories;
+using Accounts.Repositories.Command;
 using Accounts.Services;
+using Accounts.Services.Command;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Procurement.Data;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -20,6 +23,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IFiscalPeriods, FiscalRepository>();
+builder.Services.AddScoped<IFiscalPeriodCommands, FiscalCommandRepo>();
 
 var app = builder.Build();
 
