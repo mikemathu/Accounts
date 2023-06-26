@@ -58,13 +58,22 @@ namespace Accounts.Controllers
             return View(accountDetails);
         }
 
+        [IgnoreAntiforgeryToken]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        public JsonResult SaveStudentWithSerialize(AccountDetailVM student1)
+        {
+            return Json("student saved successfully");
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult> GeneralLedgerAccounts(AccountDetailVM accountDetails)
+        /* public JsonResult GeneralLedgerAccounts(AccountDetailVM accountDetails)*/
         {
             var accountDetail = _mapper.Map<AccountDetail>(accountDetails);
             _fiscalperiodCommands.AddAccountDetails(accountDetail);
             _fiscalperiodCommands.SaveChanges();
+            /*return Json(true);*/
             return RedirectToAction(nameof(GeneralLedgerAccounts));
         }
         public IActionResult PaymentModes()
