@@ -13,7 +13,7 @@ namespace Accounts.Repositories.Command
         public FiscalCommandRepo(ApplicationDbContext context)
         {
             _context = context;
-        }
+        }     
 
         public void AddFiscalPeriod(FiscalPeriod fiscalId)
         {
@@ -23,6 +23,16 @@ namespace Accounts.Repositories.Command
             }
 
             _context.fiscalperiods.Add(fiscalId);
+        }
+
+        public void AddAccountDetails(AccountDetail accountDetail)
+        {
+            if (accountDetail == null)
+            {
+                throw new ArgumentNullException(nameof(accountDetail));
+            }
+
+            _context.accountdetails.Add(accountDetail);
         }
 
         public bool SaveChanges()

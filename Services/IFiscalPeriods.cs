@@ -6,5 +6,6 @@ namespace Accounts.Services
     {
 
         Task<IEnumerable<FiscalPeriodVM>> GetFiscalPeriods();
+        Task<IEnumerable<AccountDetailVM>> GetAccountsDetails();
     }
 }

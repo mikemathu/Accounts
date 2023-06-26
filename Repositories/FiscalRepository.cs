@@ -7,6 +7,7 @@ namespace Accounts.Repositories
     public class FiscalRepository : IFiscalPeriods
     {
         private const string _fiscalPeriodsTable = "FiscalPeriods";
+        private const string _accountDetailsTable = "AccountDetails";
         private IConfiguration _config;
         private NpgsqlConnection _connection;
         public FiscalRepository(IConfiguration config)
@@ -26,7 +27,7 @@ namespace Accounts.Repositories
             OpenConnection();
             List<FiscalPeriodVM> fiscalPeriods = new List<FiscalPeriodVM>();
 
-            string commandText = $"SELECT * FROM {_fiscalPeriodsTable}";
+            var commandText = $"SELECT * FROM {_fiscalPeriodsTable} ";
             using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
             {
                 using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -51,6 +52,32 @@ namespace Accounts.Repositories
             return fiscalPeriods;
         }
 
-     
+        public async Task<IEnumerable<AccountDetailVM>> GetAccountsDetails()
+        {
+            OpenConnection();
+            List<AccountDetailVM> accountDetails = new List<AccountDetailVM>();
+
+            string commandText = $"SELECT * FROM {_accountDetailsTable} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        accountDetails.Add(new AccountDetailVM
+                        {
+                            Id = (int)reader["Id"],
+                            AccountName = (string)reader["AccountName"],
+                            AccountClass = (string)reader["AccountClass"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountDetails.Count() == 0)
+                return null;
+            return accountDetails;
+        }
     }
 }

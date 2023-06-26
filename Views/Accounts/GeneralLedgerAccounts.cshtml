@@ -1,4 +1,7 @@
-﻿<div class=row>
+﻿@model Accounts.Models.VM.AccountDetailVM
+
+<div class=row>
+
                                 <div class=col-md-6>
                                     <div class="panel panel-default">
                                         <div class="panel-heading clearfix">
@@ -24,46 +27,51 @@
                                             </h6>
                                         </div>
                                         <div class=panel-body>
-                                            <form method=post id=AccountForm>
+                                            <form asp-controller="Accounts" asp-action="GeneralLedgerAccounts">
+                                            @*     <div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
                                                 <input hidden type=number data-val=true data-val-required="The AccountID field is required." id=Account_AccountID name=Account.AccountID>
                                                 <input value=1 hidden type=number data-val=true data-val-required="The CompanyBranchID field is required." id=Account_CompanyBranchID name=Account.CompanyBranchID>
                                                 <div class=row>
                                                     <div class=col-md-6>
-                                                        <div class=form-group>
-                                                            <label>
-                                                                <small>Account No</small>
-                                                            </label>
-                                                            <input type=number class="form-control input-sm" readonly data-val=true data-val-required="The AccountNo field is required." id=Account_AccountNo name=Account.AccountNo>
+                                                        <div class=form-group>                                                          
+                                                        <label asp-for="Id" class="control-label"></label>
+                                                        <input asp-for="Id" class="form-control input-sm" />
+                                                        <span asp-validation-for="Id" class="text-danger"></span>
                                                         </div>
-                                                        <div class=form-group>
-                                                            <label>
-                                                                <small>Account Name</small>
-                                                            </label>
-                                                            <input class="form-control input-sm" required data-val=true data-val-required="The Name field is required." id=Account_Name name=Account.Name>
+                                                        <div class=form-group>                                                         
+                                                            <label asp-for="AccountName" class="control-label"></label>
+                                                            <input asp-for="AccountName" class="form-control input-sm" />
+                                                            <span asp-validation-for="AccountName" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class=col-md-6>
                                                         <div class=form-group>
-                                                            <label class=control-label>
-                                                                <small>Account Class</small>
-                                                            </label>
-                                                            <div class=input-group>
-                                                                <select class="form-control input-sm select-account-class" style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_AccountClassID name=Account.AccountClassID>
-                                                                    <option value=0></option>
+                                                                <label asp-for="AccountClass" class="control-label"></label>
+                                                                    <select asp-for="AccountClass" class="form-control" id="exampleFormControlSelect1">
+                                                                    <option></option>
+                                                                    <option value="Fixed Asset">Fixed Asset</option>
+                                                                    <option value="Expence">Expence</option>
+                                                                    <option value="Income">Income</option>
                                                                 </select>
+                                                                <span asp-validation-for="AccountClass" class="text-danger"></span>
+                                                         
                                                                 <span class=input-group-btn>
                                                                     <a title="Add an account class" class="btn btn-link btn-sm" data-toggle=modal data-target=.add-accountclass-modal>
                                                                         <span class="glyphicon glyphicon-plus"></span>
                                                                     </a>
                                                                 </span>
                                                             </div>
+                                                        <div class=form-group>                                                        
+
+                                                            <label asp-for="CashFlow" class="control-label"></label>
+                                                             <select asp-for="CashFlow" class="form-control" id="exampleFormControlSelect1">
+                                                                <option></option>
+                                                                <option value="PP&E">PP&E</option>
+                                                                <option value="Cash Received">Cash Received</option>
+                                                            </select>
+                                                             <span asp-validation-for="CashFlow" class="text-danger"></span>
                                                         </div>
-                                                        <div class=form-group>
-                                                            <label>
-                                                                <small>Cash Flow Category</small>
-                                                            </label>
-                                                            <select class="form-control input-sm" data-val=true data-val-required="The CashFlowCategoryID field is required." id=Account_CashFlowCategoryID name=Account.CashFlowCategoryID></select>
-                                                        </div>
+                                                 </div>
                                                         <div id=updateaccount hidden>
                                                             <div class="btn-group btn-group-xs pull-right">
                                                                 <button id=btnupdateaccount class="btn btn-primary ladda-button" data-style=expand-right data-size=s>Update</button>
@@ -71,14 +79,18 @@
                                                             </div>
                                                         </div>
                                                         <div id=addaccount>
-                                                            <button id=btnaddaccount class="btn btn-xs btn-primary pull-right ladda-button" data-style=expand-right data-size=s>
+                                                         @*   <button id=btnaddaccount class="btn btn-xs btn-primary pull-right ladda-button" data-style=expand-right data-size=s>
                                                                 <span class="glyphicon glyphicon-plus"></span>
-                                                            </button>
+                                                            </button>*@
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <input name=__RequestVerificationToken type=hidden value=CfDJ8It5D1qqI4lBjCCzFnB6CeqfglvO4yoFHZGMZv-GgSxEFw4rG-LxZBvxBS0OHal2GjdPrzXZ-47bJn3qsHTngmVteybGBsSEMuHJHTDRHfBDmeJBXgWCNn3N0goljfSAgEx1QzKX2OjzpFvhTpKv_NU94WRCgMS9XSDER8ElzVbPwLEIYsmNl47ZANZmElNhVQ>
-                                            </form>
+                                              
+                                               @* <input name=__RequestVerificationToken type=hidden value=CfDJ8It5D1qqI4lBjCCzFnB6CeqfglvO4yoFHZGMZv-GgSxEFw4rG-LxZBvxBS0OHal2GjdPrzXZ-47bJn3qsHTngmVteybGBsSEMuHJHTDRHfBDmeJBXgWCNn3N0goljfSAgEx1QzKX2OjzpFvhTpKv_NU94WRCgMS9XSDER8ElzVbPwLEIYsmNl47ZANZmElNhVQ>*@
+            </form>
+           @* </div>*@
+
+                                             
                                         </div>
                                         <div class=panel-heading>
                                             <h6 class=panel-title>View: Accounts</h6>
@@ -94,6 +106,24 @@
                                                         <th>
                                                             <strong>Account Class</strong>
                                                             <tbody>
+
+                    <tbody>
+                                                @foreach (var item in Model.AccountDetails)
+                                                {
+                            <tr>
+                                <td>
+                                                            @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                                            @Html.DisplayFor(modelItem => item.AccountName)
+                                </td>
+                                <td>
+                                                            @Html.DisplayFor(modelItem => item.AccountClass)
+                                </td>
+                                
+                            </tr>
+                                                }
+                    </tbody>
                                             </table>
                                         </div>
                                     </div>

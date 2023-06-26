@@ -10,6 +10,7 @@ namespace PlatformService.Profiles
         {
             // Source -> Target
             CreateMap<FiscalPeriodVM, FiscalPeriod>();
+            CreateMap<AccountDetailVM, AccountDetail>();
         }
     }
 }

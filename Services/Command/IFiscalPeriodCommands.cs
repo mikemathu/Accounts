@@ -7,5 +7,6 @@ namespace Accounts.Services.Command
     {
         bool SaveChanges();
         void AddFiscalPeriod(FiscalPeriod fiscalId);
+        void AddAccountDetails(AccountDetail accountDetail);
     }
 }

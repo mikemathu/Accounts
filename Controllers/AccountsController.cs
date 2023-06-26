@@ -47,10 +47,26 @@ namespace Accounts.Controllers
             _fiscalperiodCommands.SaveChanges();
             return RedirectToAction(nameof(FiscalPeriods));
         }
-        public IActionResult GeneralLedgerAccounts()
+        public async Task<IActionResult> GeneralLedgerAccounts()
         {
-            return View();
-        } 
+            var items = await _fiscalperiodRepository.GetAccountsDetails();
+
+            AccountDetailVM accountDetails = new AccountDetailVM()
+            {
+                AccountDetails = items,
+            };
+            return View(accountDetails);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> GeneralLedgerAccounts(AccountDetailVM accountDetails)
+        {
+            var accountDetail = _mapper.Map<AccountDetail>(accountDetails);
+            _fiscalperiodCommands.AddAccountDetails(accountDetail);
+            _fiscalperiodCommands.SaveChanges();
+            return RedirectToAction(nameof(GeneralLedgerAccounts));
+        }
         public IActionResult PaymentModes()
         {
             return View();
