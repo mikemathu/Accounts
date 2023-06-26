@@ -62,14 +62,13 @@
             $.ajax({
                 type: 'POST',
                 url: "/Accounts/GeneralLedgerAccounts",
-                data: formData,
+                data: formData,                
                 error: function (e) {
-                    console.log(e);
+                    alert("Data Submitted");
                 },
                 dataType: "json",
                // contentType: "application/json"
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',            
             });
         }
     }
