@@ -1,0 +1,76 @@
+﻿@model Accounts.Models.VM.AccountDetailVM
+@{
+    Layout = null;
+}
+
+<form id="studentForm">   
+@*<form id="friendform">*@
+    <div class=row>
+        <div class=col-md-6>
+            <div class=form-group>                                                         
+                <label asp-for="AccountName" class="control-label"></label>
+                <input asp-for="AccountName" class="form-control input-sm" id="AccountName" />
+                <span asp-validation-for="AccountName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class=col-md-6>
+            <div class=form-group>
+                <label asp-for="AccountClass" class="control-label"></label>
+                <select asp-for="AccountClass" class="form-control" id="AccountClass">
+                <option></option>
+                <option value="Fixed Asset">Fixed Asset</option>
+                <option value="Expence">Expence</option>
+                <option value="Income">Income</option>
+                </select>
+                <span asp-validation-for="AccountClass" class="text-danger"></span>
+            </div>
+            <div class=form-group>                                                     
+                <label asp-for="CashFlow" class="control-label"></label>
+                <select  asp-for="CashFlow" class="form-control" id="CashFlow" >
+                <option></option>
+                <option value="PP&E">PP&E</option>
+                <option value="Cash Received">Cash Received</option>
+                </select>
+                <span asp-validation-for="CashFlow" class="text-danger"></span>
+            </div>
+        </div>
+        <div id=addaccount>
+            <button class="btn btn-primary" type="button" onclick="SaveStudent()" id="btnsubmit"> Save </button>
+            @*<button class="btn btn-primary" type="button"  id="btnsubmit"> Save </button>*@
+        </div>
+         <input name=__RequestVerificationToken type=hidden value=CfDJ8It5D1qqI4lBjCCzFnB6CeqfglvO4yoFHZGMZv-GgSxEFw4rG-LxZBvxBS0OHal2GjdPrzXZ-47bJn3qsHTngmVteybGBsSEMuHJHTDRHfBDmeJBXgWCNn3N0goljfSAgEx1QzKX2OjzpFvhTpKv_NU94WRCgMS9XSDER8ElzVbPwLEIYsmNl47ZANZmElNhVQ>
+    </div>                                              
+</form>
+
+<script src="https://webapps1.chicago.gov/cdn/jQuery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+    $(document).ready(function () {
+        console.log("ready!");
+        alert("ready");
+        $.validator.unobtrusive.parse($("#studentForm"));
+    });
+
+    function SaveStudent() {
+        if ($("#studentForm").valid()) {
+            var formData = $("#studentForm").serialize();
+            console.log( formData);
+            var dataJson = JSON.stringify(formData);
+            console.log( dataJson);        
+            $.ajax({
+                type: 'POST',
+                url: "/Accounts/GeneralLedgerAccounts",
+                data: formData,                
+                error: function (e) {
+                    alert("Data Submitted");
+                },
+                dataType: "json",
+               // contentType: "application/json"
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',            
+            });
+        }
+    }
+</script>

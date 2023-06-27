@@ -1,4 +1,6 @@
-﻿namespace Accounts.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Accounts.Models
 {
     public class AccountDetail
     {
@@ -12,7 +14,10 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public int IsActive { get; set; }
-        public int AccountDetailsId { get; set; }
+
+        [ForeignKey("AccountDetailId")]
+        public AccountDetail AccountDetail { get; set; }
+        public int AccountDetailId { get; set; }
         public int CurrentBalance { get; set; }
     }
 }

@@ -7,6 +7,8 @@
         public string AccountClass { get; set; }
         public string CashFlow { get; set; }
         public IEnumerable<AccountDetailVM> AccountDetails { get; set; }
+        public IEnumerable<SubAccountDetailVM> SubAccountDetails { get; set; }
+
     }
     public class SubAccountDetailVM
     {
