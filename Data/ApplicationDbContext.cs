@@ -17,8 +17,8 @@ namespace Procurement.Data
 
         public DbSet<FiscalPeriod> fiscalperiods { get; set; }
         public DbSet<AccountDetail> accountdetails { get; set; }
-        public DbSet<SubAccountDetail> subsccountdetails { get; set; }
-        public DbSet<JournalVoucher> journalvouchers { get; set; }
+        public DbSet<SubAccountDetail> SubAccountDetails { get; set; }
+        public DbSet<JournalVoucher> JournalVouchers { get; set; }
 
     }
 }

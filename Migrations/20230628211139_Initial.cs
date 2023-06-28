@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accounts.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AccountDetails",
+                name: "accountdetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -24,7 +24,7 @@ namespace Accounts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AccountDetails", x => x.Id);
+                    table.PrimaryKey("PK_accountdetails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,19 +67,19 @@ namespace Accounts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FiscalPeriods",
+                name: "fiscalperiods",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OpenDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CloseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OpenDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CloseDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false),
                     IsOpen = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FiscalPeriods", x => x.Id);
+                    table.PrimaryKey("PK_fiscalperiods", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,7 +91,7 @@ namespace Accounts.Migrations
                     SourceReference = table.Column<string>(type: "text", nullable: false),
                     Department = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    TrasnactionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TrasnactionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Amount = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     PostedBy = table.Column<string>(type: "text", nullable: false),
@@ -110,12 +110,18 @@ namespace Accounts.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false),
-                    AccountDetailsId = table.Column<int>(type: "integer", nullable: false),
+                    AccountDetailId = table.Column<int>(type: "integer", nullable: false),
                     CurrentBalance = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubAccountDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubAccountDetails_accountdetails_AccountDetailId",
+                        column: x => x.AccountDetailId,
+                        principalTable: "accountdetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,14 +266,16 @@ namespace Accounts.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubAccountDetails_AccountDetailId",
+                table: "SubAccountDetails",
+                column: "AccountDetailId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AccountDetails");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -284,7 +292,7 @@ namespace Accounts.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FiscalPeriods");
+                name: "fiscalperiods");
 
             migrationBuilder.DropTable(
                 name: "JournalVouchers");
@@ -297,6 +305,9 @@ namespace Accounts.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "accountdetails");
         }
     }
 }

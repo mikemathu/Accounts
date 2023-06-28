@@ -27,7 +27,7 @@
                                         </div>
                                         <div class=panel-body>
                                             <form method=post id=AccountForm>
-                                                <input hidden type=number data-val=true data-val-required="The AccountID field is required." id=Account_AccountID name=Account.AccountID>
+                                                <input hidden type=number data-val=true data-val-required="The AccountID field is required." id=Account_AccountID name=Account.id>
                                                 <input value=1 hidden type=number data-val=true data-val-required="The CompanyBranchID field is required." id=Account_CompanyBranchID name=Account.CompanyBranchID>
                                                 <div class=row>
                                                     <div class=col-md-6>
@@ -125,7 +125,7 @@
                                                             <label>
                                                                 <small>Account</small>
                                                             </label>
-                                                            <select class="form-control input-sm" required disabled data-val=true data-val-required="The AccountID field is required." id=SubAccount_AccountID name=SubAccount.AccountID></select>
+                                                            <select class="form-control input-sm" required disabled data-val=true data-val-required="The AccountID field is required." id=SubAccount_AccountID name=SubAccount.id></select>
                                                         </div>
                                                     </div>
                                                     <div class=col-md-6>
@@ -364,9 +364,9 @@
                 !$.isEmptyObject(r))) {
                 u = "";
                 for (let i = 0; i < r.length; i++)
-                    t.append(new Option(r[i].name, r[i].accountID)),
-                        n.append(new Option(r[i].name, r[i].accountID)),
-                        //u += '<tr id="' + r[i].accountID + '"><td data-title="Account No">' + r[i].Id + '<\/td><td data-title="Account Name">' + r[i].name + '<\/td><td data-title="Account Class">' + r[i].accountClass + "<\/td><\/tr>";
+                    t.append(new Option(r[i].name, r[i].id)),
+                        n.append(new Option(r[i].name, r[i].id)),
+                        //u += '<tr id="' + r[i].id + '"><td data-title="Account No">' + r[i].Id + '<\/td><td data-title="Account Name">' + r[i].name + '<\/td><td data-title="Account Class">' + r[i].accountClass + "<\/td><\/tr>";
                             u += '<tr id="' + r[i].id + '"><td data-title="Account No">' + r[i].id + '<\/td><td data-title="Account Name">' + r[i].accountName + '<\/td><td data-title="Account Class">' + r[i].accountClass + "<\/td><\/tr>";
                         accountsTable.rows.add($(u)).draw(!1);
                 t.select2();
@@ -380,7 +380,7 @@
         AjaxServerCallAsync("POST", "/Accounts/GetAccountDetails/", t, i, function (t) {
             var i = t.response, f;
             if (t.status) {
-                var u = i.accountID
+                var u = i.id
                     , e = i.accountNo
                     , r = i.name
                     , o = i.accountClassID;
@@ -731,11 +731,11 @@
             var r = n.response;
             if (n.status) {
                 if (i > 0) {
-                    let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
+                    let n = '<tr id="' + r.id + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
                     $("#accountstable #" + i).replaceWith(n);
                     Notify(!0, "Account Updated Successfully")
                 } else {
-                    let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
+                    let n = '<tr id="' + r.id + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
                     accountsTable.row.add($(n)).draw(!1);
                     Notify(!0, "Account Created Successfully");
                     $("#btnCreateNewAccount").click()
@@ -775,7 +775,7 @@
         }
             , u = $("#SubAccountForm input[name=__RequestVerificationToken]").val();
         GetOrPostAsync("POST", "/Accounts/CreateUpdateSubAccount/", r, u).then(() => {
-            LoadAllSubAccountsByAccountID(r.AccountID),
+            LoadAllSubAccountsByAccountID(r.id),
                 t.stop(),
                 i > 0 ? Notify(!0, "Sub Account Updated Successfully") : (Notify(!0, "Sub Account Created Successfully"),
                     $("#btnCreateNewSubAccount").click())
@@ -802,7 +802,7 @@
             var i = n
                 , r = $("#AccountForm input[name=__RequestVerificationToken]").val();
             GetOrPostAsync("POST", "/Accounts/GetAccountByConfiguration/", i, r).then(n => {
-                $.isEmptyObject(n) || t.val(n.accountID).select2()
+                $.isEmptyObject(n) || t.val(n.id).select2()
             }
             ).catch(n => Notify(!1, n))
         }

@@ -12,8 +12,8 @@ using Procurement.Data;
 namespace Accounts.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230627055840_joutnalvouchers")]
-    partial class joutnalvouchers
+    [Migration("20230628211139_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,7 +114,7 @@ namespace Accounts.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("journalvouchers");
+                    b.ToTable("JournalVouchers");
                 });
 
             modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
@@ -140,7 +140,9 @@ namespace Accounts.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("subsccountdetails");
+                    b.HasIndex("AccountDetailId");
+
+                    b.ToTable("SubAccountDetails");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -341,6 +343,17 @@ namespace Accounts.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
+                {
+                    b.HasOne("Accounts.Models.AccountDetail", "AccountDetail")
+                        .WithMany()
+                        .HasForeignKey("AccountDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountDetail");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

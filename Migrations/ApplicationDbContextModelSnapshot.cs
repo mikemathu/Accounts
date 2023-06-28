@@ -111,7 +111,7 @@ namespace Accounts.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("journalvouchers");
+                    b.ToTable("JournalVouchers");
                 });
 
             modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
@@ -139,7 +139,7 @@ namespace Accounts.Migrations
 
                     b.HasIndex("AccountDetailId");
 
-                    b.ToTable("subsccountdetails");
+                    b.ToTable("SubAccountDetails");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
