@@ -10,7 +10,12 @@
         public IEnumerable<SubAccountDetailVM> SubAccountDetails { get; set; }
 
     }
-    public class SubAccountDetailVM
+
+    public class AccountDetailVMList
+    {
+        public IEnumerable<AccountDetailVM> AccountDetails { get; set; }
+    }
+        public class SubAccountDetailVM
     {
         public int Id { get; set; }
         public string Name { get; set; }

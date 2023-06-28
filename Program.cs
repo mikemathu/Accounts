@@ -49,7 +49,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Accounts}/{action=GeneralLedgerAccounts}/{id?}");
+    pattern: "{controller=Accounts}/{action=GetAllAccounts}/{id?}");
 app.MapRazorPages();
 
 app.Run();
