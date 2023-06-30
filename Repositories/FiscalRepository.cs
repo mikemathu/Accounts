@@ -8,6 +8,7 @@ namespace Accounts.Repositories
     {
         private const string _fiscalPeriodsTable = "FiscalPeriods";
         private const string _accountDetailsTable = "AccountDetails";
+        private const string _subAccountDetailsTable = "SubAccountDetails";
         private IConfiguration _config;
         private NpgsqlConnection _connection;
         public FiscalRepository(IConfiguration config)
@@ -69,6 +70,37 @@ namespace Accounts.Repositories
                             Id = (int)reader["Id"],
                             AccountName = (string)reader["AccountName"],
                             AccountClass = (string)reader["AccountClass"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountDetails.Count() == 0)
+                return null;
+            return accountDetails;
+        }
+
+        public async Task<IEnumerable<SubAccountDetailVM>> GetSubAccountsDetails()
+        {
+            OpenConnection();
+            List<SubAccountDetailVM> accountDetails = new List<SubAccountDetailVM>();
+
+            //string commandText = $"SELECT * FROM \"{_subAccountDetailsTable}\" WHERE \"AccountDetailId\" = {id}";
+            string commandText = $"SELECT * FROM \"{_subAccountDetailsTable}\" ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        accountDetails.Add(new SubAccountDetailVM
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"],
+                            IsActive = (int)reader["IsActive"],
+                            AccountDetailsId = (int)reader["AccountDetailId"],
+                            CurrentBalance = (int)reader["CurrentBalance"]
                         });
                     }
                     reader.Close();

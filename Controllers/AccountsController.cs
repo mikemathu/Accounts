@@ -47,39 +47,36 @@ namespace Accounts.Controllers
             _fiscalperiodCommands.SaveChanges();
             return RedirectToAction(nameof(FiscalPeriods));
         }
-        //public async Task<IActionResult> GeneralLedgerAccounts()
         public async Task<IActionResult> GetAllAccounts()
         {
-            /*   var items = await _fiscalperiodRepository.GetAccountsDetails();
-
-               AccountDetailVM accountDetails = new AccountDetailVM()
-               {
-                   AccountDetails = items,
-               };
-               return View(accountDetails);*/
             return View();
         }
 
-        //public async Task<IActionResult> GetAllAccounts2()
         public async Task<JsonResult> GetAllAccounts2()
 
         {
             var items = await _fiscalperiodRepository.GetAccountsDetails();
-
-          /*  AccountDetailVMList accountDetails = new AccountDetailVMList()
-            {
-                AccountDetails = items,
-            };*/
-            //return Json(accountDetails);
             return Json(items);
         }
 
-        [IgnoreAntiforgeryToken]
         [HttpPost]
-        public JsonResult SaveStudentWithSerialize(AccountDetailVM student1)
+        public async Task<ActionResult> GetAllLedgerAccountsPanelSubAccountsByAccountID( SubAccountDetailVM model)
         {
-            return Json("student saved successfully");
+            //string requestData = Request.InputStream.ReadToEnd();
+            //string requestData2 = Request.HttpContext.
+
+            var items = await _fiscalperiodRepository.GetSubAccountsDetails();
+            return Json(items);
         }
+
+        /*  public async Task<JsonResult> GetAccountDetails()
+
+          {
+              var items = await _fiscalperiodRepository.GetAccountsDetails();
+              return Json(items);
+          }*/
+
+
 
         [HttpPost]
         [IgnoreAntiforgeryToken]
