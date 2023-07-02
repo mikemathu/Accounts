@@ -5,7 +5,7 @@ using Accounts.Services.Command;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
-using Procurement.Data;
+using Accounts.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +28,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IFiscalPeriods, FiscalRepository>();
 builder.Services.AddScoped<IFiscalPeriodCommands, FiscalCommandRepo>();
+
+//GeneralLedgerAccounts
+builder.Services.AddScoped<IGeneralLedgerAccountsCommand, GeneralLedgerAccountsCommandRepo>();
+builder.Services.AddScoped<IGeneralLedgerAccountsQuery, GeneralLedgerAccountsQueryRepo>();
 
 var app = builder.Build();
 
@@ -53,7 +57,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Accounts}/{action=GetAllAccounts}/{id?}");
+    pattern: "{controller=Accounts}/{action=GeneralLedgerAccounts}/{id?}");
 app.MapRazorPages();
 
 app.Run();

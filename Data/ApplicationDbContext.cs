@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Procurement.Data
+namespace Accounts.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

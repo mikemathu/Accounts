@@ -1,16 +1,21 @@
+using Accounts.Dtos;
 using Accounts.Models;
 using Accounts.Models.VM;
 using AutoMapper;
 
 namespace PlatformService.Profiles
 {
-    public class PlatformsProfile : Profile
+    public class GeneralLedgerAccountsProfile : Profile
     {
-        public PlatformsProfile()
+        public GeneralLedgerAccountsProfile()
         {
             // Source -> Target
             CreateMap<FiscalPeriodVM, FiscalPeriod>();
             CreateMap<AccountDetailVM, AccountDetail>();
+
+            //GeneralLedgerAccounts
+            CreateMap<AccountReadDto, AccountDetail>();
+            CreateMap<CreateUpdateAccountDto, AccountDetail>();
         }
     }
 }

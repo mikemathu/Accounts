@@ -7,7 +7,7 @@ namespace Accounts.Repositories
     public class FiscalRepository : IFiscalPeriods
     {
         private const string _fiscalPeriodsTable = "FiscalPeriods";
-        private const string _accountDetailsTable = "AccountDetails";
+        private const string _accountDetailsTable = "AccountsDetails";
         private const string _subAccountDetailsTable = "SubAccountDetails";
         private IConfiguration _config;
         private NpgsqlConnection _connection;
@@ -58,7 +58,7 @@ namespace Accounts.Repositories
             OpenConnection();
             List<AccountDetailVM> accountDetails = new List<AccountDetailVM>();
 
-            string commandText = $"SELECT * FROM {_accountDetailsTable} ";
+            string commandText = $"SELECT * FROM \"{_accountDetailsTable}\" ";
             using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
             {
                 using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -67,9 +67,9 @@ namespace Accounts.Repositories
                     {
                         accountDetails.Add(new AccountDetailVM
                         {
-                            Id = (int)reader["Id"],
-                            AccountName = (string)reader["AccountName"],
-                            AccountClass = (string)reader["AccountClass"]
+                            Id = (int)reader["AccountID"],
+                            AccountName = (string)reader["Name"],
+                            AccountClass = (string)reader["AccountClassID"]
                         });
                     }
                     reader.Close();

@@ -2,7 +2,7 @@
 using Accounts.Models.VM;
 using Accounts.Services.Command;
 using Microsoft.EntityFrameworkCore;
-using Procurement.Data;
+using Accounts.Data;
 
 namespace Accounts.Repositories.Command
 {

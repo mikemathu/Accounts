@@ -6,5 +6,6 @@ namespace Accounts.Models
     {
         [Key]
         public int AccountClassID { get; set; }
+        public string ClassName { get; set; }
     }
 }
