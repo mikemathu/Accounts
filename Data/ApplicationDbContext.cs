@@ -15,10 +15,15 @@ namespace Procurement.Data
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        public DbSet<FiscalPeriod> fiscalperiods { get; set; }
-        public DbSet<AccountDetail> accountdetails { get; set; }
-        public DbSet<SubAccountDetail> SubAccountDetails { get; set; }
+        public DbSet<AccountClass> AccountClasses { get; set; }
+        public DbSet<AccountDetail> AccountsDetails { get; set; }
+        public DbSet<CashFlowCategory> CashFlowCategories { get; set; }
+        public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<FiscalPeriod> FiscalPeriods { get; set; }
         public DbSet<JournalVoucher> JournalVouchers { get; set; }
+        public DbSet<LetterCase> LetterCases { get; set; }
+        public DbSet<SubAccountDetail> SubAccountsDetails { get; set; }
+    
 
     }
 }

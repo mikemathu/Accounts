@@ -22,7 +22,7 @@ namespace Accounts.Repositories.Command
                 throw new ArgumentNullException(nameof(fiscalId));
             }
 
-            _context.fiscalperiods.Add(fiscalId);
+            _context.FiscalPeriods.Add(fiscalId);
         }
 
         public void AddAccountDetails(AccountDetail accountDetail)
@@ -32,7 +32,7 @@ namespace Accounts.Repositories.Command
                 throw new ArgumentNullException(nameof(accountDetail));
             }
 
-            _context.accountdetails.Add(accountDetail);
+            _context.AccountsDetails.Add(accountDetail);
         }
 
         public bool SaveChanges()

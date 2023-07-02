@@ -380,8 +380,8 @@
         function GetAccountDetails(n) {
             var t = n
                 , i = $("#AccountForm input[name=__RequestVerificationToken]").val();
-           // AjaxServerCallAsync("POST", "/Accounts/GetAllAccounts2/", t, i, function (t) {
-            AjaxServerCallAsync("POST", "/Accounts/GetAllLedgerAccountsPanelSubAccountsByAccountID/", t, i, function (t) {
+            AjaxServerCallAsync("POST", "/Accounts/GetAllAccounts2/", t, i, function (t) {
+            //AjaxServerCallAsync("POST", "/Accounts/GetAllLedgerAccountsPanelSubAccountsByAccountID/", t, i, function (t) {
                 var i = t.response, f;
                 if (t.status) {
                     var u = i.id

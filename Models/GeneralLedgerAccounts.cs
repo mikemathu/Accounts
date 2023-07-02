@@ -2,14 +2,14 @@
 
 namespace Accounts.Models
 {
-    public class AccountDetail
+  /*  public class AccountDetail
     {
         public int Id { get; set; }
         public string AccountName { get; set; }
         public string AccountClass { get; set; }
         public string CashFlow { get; set; }
-    }
-    public class SubAccountDetail
+    }*/
+/*    public class SubAccountDetail
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -19,5 +19,5 @@ namespace Accounts.Models
         public AccountDetail AccountDetail { get; set; }
         public int AccountDetailId { get; set; }
         public int CurrentBalance { get; set; }
-    }
+    }*/
 }

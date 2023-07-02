@@ -7,24 +7,21 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accounts.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Add_GeneralLedgerAccounts_Models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "accountdetails",
+                name: "AccountClasses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AccountName = table.Column<string>(type: "text", nullable: false),
-                    AccountClass = table.Column<string>(type: "text", nullable: false),
-                    CashFlow = table.Column<string>(type: "text", nullable: false)
+                    AccountClassID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_accountdetails", x => x.Id);
+                    table.PrimaryKey("PK_AccountClasses", x => x.AccountClassID);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,10 +64,36 @@ namespace Accounts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "fiscalperiods",
+                name: "CashFlowCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    CashFlowCategoryID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CashFlowCategories", x => x.CashFlowCategoryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Configurations",
+                columns: table => new
+                {
+                    ConfigurationType = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Configurations", x => x.ConfigurationType);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FiscalPeriods",
+                columns: table => new
+                {
+                    FiscalPeriodId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OpenDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CloseDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -79,14 +102,14 @@ namespace Accounts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_fiscalperiods", x => x.Id);
+                    table.PrimaryKey("PK_FiscalPeriods", x => x.FiscalPeriodId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "JournalVouchers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    JournalVoucherId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SourceReference = table.Column<string>(type: "text", nullable: false),
                     Department = table.Column<string>(type: "text", nullable: false),
@@ -99,29 +122,19 @@ namespace Accounts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JournalVouchers", x => x.Id);
+                    table.PrimaryKey("PK_JournalVouchers", x => x.JournalVoucherId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubAccountDetails",
+                name: "LetterCases",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<int>(type: "integer", nullable: false),
-                    AccountDetailId = table.Column<int>(type: "integer", nullable: false),
-                    CurrentBalance = table.Column<int>(type: "integer", nullable: false)
+                    LetterCaseType = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubAccountDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubAccountDetails_accountdetails_AccountDetailId",
-                        column: x => x.AccountDetailId,
-                        principalTable: "accountdetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_LetterCases", x => x.LetterCaseType);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,6 +243,87 @@ namespace Accounts.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AccountsDetails",
+                columns: table => new
+                {
+                    AccountID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AccountNo = table.Column<int>(type: "integer", nullable: false),
+                    AccountClassID = table.Column<int>(type: "integer", nullable: false),
+                    CashFlowCategoryID = table.Column<int>(type: "integer", nullable: false),
+                    ConfigurationType = table.Column<int>(type: "integer", nullable: false),
+                    IsLocked = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountsDetails", x => x.AccountID);
+                    table.ForeignKey(
+                        name: "FK_AccountsDetails_AccountClasses_AccountClassID",
+                        column: x => x.AccountClassID,
+                        principalTable: "AccountClasses",
+                        principalColumn: "AccountClassID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccountsDetails_CashFlowCategories_CashFlowCategoryID",
+                        column: x => x.CashFlowCategoryID,
+                        principalTable: "CashFlowCategories",
+                        principalColumn: "CashFlowCategoryID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccountsDetails_Configurations_ConfigurationType",
+                        column: x => x.ConfigurationType,
+                        principalTable: "Configurations",
+                        principalColumn: "ConfigurationType",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubAccountsDetails",
+                columns: table => new
+                {
+                    SuAccountID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AccountID = table.Column<int>(type: "integer", nullable: false),
+                    ConfigurationType = table.Column<int>(type: "integer", nullable: false),
+                    CurrentBalance = table.Column<int>(type: "integer", nullable: false),
+                    IsActive = table.Column<int>(type: "integer", nullable: false),
+                    IsLocked = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubAccountsDetails", x => x.SuAccountID);
+                    table.ForeignKey(
+                        name: "FK_SubAccountsDetails_AccountsDetails_AccountID",
+                        column: x => x.AccountID,
+                        principalTable: "AccountsDetails",
+                        principalColumn: "AccountID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubAccountsDetails_Configurations_ConfigurationType",
+                        column: x => x.ConfigurationType,
+                        principalTable: "Configurations",
+                        principalColumn: "ConfigurationType",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountsDetails_AccountClassID",
+                table: "AccountsDetails",
+                column: "AccountClassID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountsDetails_CashFlowCategoryID",
+                table: "AccountsDetails",
+                column: "CashFlowCategoryID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountsDetails_ConfigurationType",
+                table: "AccountsDetails",
+                column: "ConfigurationType");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -268,9 +362,14 @@ namespace Accounts.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubAccountDetails_AccountDetailId",
-                table: "SubAccountDetails",
-                column: "AccountDetailId");
+                name: "IX_SubAccountsDetails_AccountID",
+                table: "SubAccountsDetails",
+                column: "AccountID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubAccountsDetails_ConfigurationType",
+                table: "SubAccountsDetails",
+                column: "ConfigurationType");
         }
 
         /// <inheritdoc />
@@ -292,13 +391,16 @@ namespace Accounts.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "fiscalperiods");
+                name: "FiscalPeriods");
 
             migrationBuilder.DropTable(
                 name: "JournalVouchers");
 
             migrationBuilder.DropTable(
-                name: "SubAccountDetails");
+                name: "LetterCases");
+
+            migrationBuilder.DropTable(
+                name: "SubAccountsDetails");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -307,7 +409,16 @@ namespace Accounts.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "accountdetails");
+                name: "AccountsDetails");
+
+            migrationBuilder.DropTable(
+                name: "AccountClasses");
+
+            migrationBuilder.DropTable(
+                name: "CashFlowCategories");
+
+            migrationBuilder.DropTable(
+                name: "Configurations");
         }
     }
 }

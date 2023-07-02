@@ -1,8 +1,11 @@
-﻿namespace Accounts.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Accounts.Models
 {
     public class JournalVoucher
     {
-        public int Id { get; set; }
+        [Key]
+        public int JournalVoucherId { get; set; }
         public string SourceReference { get; set; }
         public string Department { get; set; }
         public string Description { get; set; }

@@ -12,8 +12,8 @@ using Procurement.Data;
 namespace Accounts.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230628211139_Initial")]
-    partial class Initial
+    [Migration("20230701184337_Add_GeneralLedgerAccounts_Models")]
+    partial class Add_GeneralLedgerAccounts_Models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,38 +25,98 @@ namespace Accounts.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Accounts.Models.AccountDetail", b =>
+            modelBuilder.Entity("Accounts.Models.AccountClass", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AccountClassID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AccountClassID"));
 
-                    b.Property<string>("AccountClass")
+                    b.HasKey("AccountClassID");
+
+                    b.ToTable("AccountClasses");
+                });
+
+            modelBuilder.Entity("Accounts.Models.AccountDetail", b =>
+                {
+                    b.Property<int>("AccountID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AccountID"));
+
+                    b.Property<int>("AccountClassID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AccountNo")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CashFlowCategoryID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConfigurationType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IsLocked")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("AccountName")
+                    b.HasKey("AccountID");
+
+                    b.HasIndex("AccountClassID");
+
+                    b.HasIndex("CashFlowCategoryID");
+
+                    b.HasIndex("ConfigurationType");
+
+                    b.ToTable("AccountsDetails");
+                });
+
+            modelBuilder.Entity("Accounts.Models.CashFlowCategory", b =>
+                {
+                    b.Property<int>("CashFlowCategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CashFlowCategoryID"));
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CashFlow")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("CashFlowCategoryID");
 
-                    b.ToTable("accountdetails");
+                    b.ToTable("CashFlowCategories");
+                });
+
+            modelBuilder.Entity("Accounts.Models.Configuration", b =>
+                {
+                    b.Property<int>("ConfigurationType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ConfigurationType"));
+
+                    b.HasKey("ConfigurationType");
+
+                    b.ToTable("Configurations");
                 });
 
             modelBuilder.Entity("Accounts.Models.FiscalPeriod", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("FiscalPeriodId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FiscalPeriodId"));
 
                     b.Property<DateTime>("CloseDate")
                         .HasColumnType("timestamp without time zone");
@@ -70,18 +130,18 @@ namespace Accounts.Migrations
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("FiscalPeriodId");
 
-                    b.ToTable("fiscalperiods");
+                    b.ToTable("FiscalPeriods");
                 });
 
             modelBuilder.Entity("Accounts.Models.JournalVoucher", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("JournalVoucherId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JournalVoucherId"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
@@ -112,20 +172,36 @@ namespace Accounts.Migrations
                     b.Property<DateTime>("TrasnactionDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("JournalVoucherId");
 
                     b.ToTable("JournalVouchers");
                 });
 
-            modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
+            modelBuilder.Entity("Accounts.Models.LetterCase", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("LetterCaseType")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LetterCaseType"));
 
-                    b.Property<int>("AccountDetailId")
+                    b.HasKey("LetterCaseType");
+
+                    b.ToTable("LetterCases");
+                });
+
+            modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
+                {
+                    b.Property<int>("SuAccountID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SuAccountID"));
+
+                    b.Property<int>("AccountID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConfigurationType")
                         .HasColumnType("integer");
 
                     b.Property<int>("CurrentBalance")
@@ -134,15 +210,19 @@ namespace Accounts.Migrations
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("IsLocked")
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Name")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("AccountDetailId");
+                    b.HasKey("SuAccountID");
 
-                    b.ToTable("SubAccountDetails");
+                    b.HasIndex("AccountID");
+
+                    b.HasIndex("ConfigurationType");
+
+                    b.ToTable("SubAccountsDetails");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -345,15 +425,50 @@ namespace Accounts.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Accounts.Models.AccountDetail", b =>
+                {
+                    b.HasOne("Accounts.Models.AccountClass", "AccountClass")
+                        .WithMany()
+                        .HasForeignKey("AccountClassID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Accounts.Models.CashFlowCategory", "CashFlowCategory")
+                        .WithMany()
+                        .HasForeignKey("CashFlowCategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Accounts.Models.Configuration", "Configuration")
+                        .WithMany()
+                        .HasForeignKey("ConfigurationType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountClass");
+
+                    b.Navigation("CashFlowCategory");
+
+                    b.Navigation("Configuration");
+                });
+
             modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
                 {
                     b.HasOne("Accounts.Models.AccountDetail", "AccountDetail")
                         .WithMany()
-                        .HasForeignKey("AccountDetailId")
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Accounts.Models.Configuration", "Configuration")
+                        .WithMany()
+                        .HasForeignKey("ConfigurationType")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AccountDetail");
+
+                    b.Navigation("Configuration");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
