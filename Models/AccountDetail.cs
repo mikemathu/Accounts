@@ -20,7 +20,6 @@ namespace Accounts.Models
         [ForeignKey("ConfigurationType")]
         public Configuration Configuration { get; set; }
         public int ConfigurationType { get; set; }
-
         public int IsLocked { get; set; }
         public string AccountName { get; set; }
     }

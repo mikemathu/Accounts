@@ -14,7 +14,8 @@ namespace PlatformService.Profiles
             CreateMap<AccountDetailVM, AccountDetail>();
 
             //GeneralLedgerAccounts
-            CreateMap<AccountReadDto, AccountDetail>();
+            CreateMap<ReadAccountDto, AccountDetail>().ReverseMap();
+            //CreateMap<AccountDetail, ReadAccountDto>();
             CreateMap<CreateUpdateAccountDto, AccountDetail>();
         }
     }

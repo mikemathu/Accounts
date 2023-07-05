@@ -4,6 +4,7 @@ using Accounts.Services;
 using Accounts.Services.Command;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Accounts.Controllers
 {
@@ -18,11 +19,13 @@ namespace Accounts.Controllers
         public AccountsController(
              IFiscalPeriods fiscalPeriodsRepository,
              IGeneralLedgerAccountsQuery accounts,
+             IGeneralLedgerAccountsCommand generalLedgerAccountsCommand,
             IMapper mapper)
         {
             _fiscalperiodRepository = fiscalPeriodsRepository;
             _generalLedgerAccountsQuery = accounts;
             _mapper = mapper;
+            _generalLedgerAccountsCommand = generalLedgerAccountsCommand;
         }
         /// <summary>
         /// GeneralLedgerAccounts
@@ -38,12 +41,12 @@ namespace Accounts.Controllers
             return Json(accounts);
         }
 
-        public async Task<JsonResult> GetAllAccounts2()
+       /* public async Task<JsonResult> GetAllAccounts2()
 
         {
             var items = await _fiscalperiodRepository.GetAccountsDetails();
             return Json(items);
-        }
+        }*/
         public IActionResult GetAccountDetails()
         {
             return View();
@@ -83,14 +86,17 @@ namespace Accounts.Controllers
         public IActionResult DeleteCashFlowCategory()
         {
             return View();
-        } 
-        public JsonResult CreateUpdateAccount(CreateUpdateAccountDto accountCreateUpdateDto)
+        }
+
+        [HttpPost]      
+        public JsonResult CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
         {
-            var accountModel = _mapper.Map<AccountDetail>(accountCreateUpdateDto);
+            var accountModel = _mapper.Map<AccountDetail>(createUpdateAccountDto);
             _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
             _generalLedgerAccountsCommand.SaveChanges();
-            //return View();
-            return Json(accountModel);
+
+            var readAccountDto = _mapper.Map<ReadAccountDto>(accountModel);
+            return Json(readAccountDto);
         }
         public IActionResult CreateUpdateSubAccount()
         {

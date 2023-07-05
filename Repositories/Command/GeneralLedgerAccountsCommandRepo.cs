@@ -22,7 +22,6 @@ namespace Accounts.Repositories.Command
             }
 
             _context.AccountsDetails.Add(account);
-            //_context.accountsdetails.Add(account);
         }
 
         public bool SaveChanges()
