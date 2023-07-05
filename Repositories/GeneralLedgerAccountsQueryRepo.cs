@@ -29,12 +29,6 @@ namespace Accounts.Repositories
         {
             OpenConnection();
             List<AccountDetail> accounts = new List<AccountDetail>();
-            /*var commandText = "SELECT \"A.AccountName\", \"A.AccountNo\", \"A.AccountID\", \"C.ClassName\" " +
-                            "FROM \"AccountsDetails\" \"A\" " +
-                            "JOIN \"AccountClasses\" \"C\" ON \"A.AccountClassID\" = \"C.AccountClassID\"";*/
-            /*            var commandText = "SELECT A.AccountName, A.AccountNo, A.AccountID, C.ClassName " +
-                              "FROM AccountsDetails A " +
-                              "JOIN AccountClasses C ON A.AccountClassID = C.AccountClassID";*/
             var commandText = "SELECT A.\"AccountName\", A.\"AccountNo\", A.\"AccountID\", C.\"ClassName\" " +
                               "FROM \"AccountsDetails\" A " +
                               "JOIN \"AccountClasses\" C ON A.\"AccountClassID\" = C.\"AccountClassID\"";
@@ -66,6 +60,92 @@ namespace Accounts.Repositories
             return accounts;
         }
 
+        public async Task<AccountDetail> GetAccountDetails(int accountID)
+        {
+            OpenConnection();
+            AccountDetail accountDetails = null;
 
+            var commandText = $"SELECT \"AccountID\", \"AccountNo\", \"AccountName\", \"AccountClassID\"  " +
+                               $"FROM \"AccountsDetails\" " +
+                               $"WHERE \"AccountID\" = {accountID} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        accountDetails = new AccountDetail
+                        {
+                            //AccountClass = new AccountClass { ClassName = (string)reader["ClassName"] },
+                            AccountID = reader.GetInt32(reader.GetOrdinal("AccountID")),
+                            AccountNo = reader.GetInt32(reader.GetOrdinal("AccountNo")),
+                            AccountName = (string)reader["AccountName"]
+                        };
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountDetails == null)
+                return null;
+            return accountDetails;
+        }
+
+        public async Task<IEnumerable<CashFlowCategory>> GetActiveCashFlowCategories()
+        {
+            OpenConnection();
+            List<CashFlowCategory> cashFlowCategories = new List<CashFlowCategory>();
+            var commandText = $"SELECT \"CashFlowCategoryID\", \"Name\", \"Type\"  " +
+                               $"FROM \"CashFlowCategories\" " +
+                               $"WHERE \"IsActive\" = 1 ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        cashFlowCategories.Add(new CashFlowCategory
+                        {
+                            CashFlowCategoryID = reader.GetInt32(reader.GetOrdinal("CashFlowCategoryID")),
+                            Name = (string)reader["Name"],
+                            Type = (string)reader["Type"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (cashFlowCategories.Count == 0)
+                return null;
+            return cashFlowCategories;
+        }
+
+        public async Task<IEnumerable<AccountClass>> GetAllAccountClasses()
+        {
+            OpenConnection();
+            List<AccountClass> accountClasses = new List<AccountClass>();
+            var commandText = $"SELECT \"AccountClassID\", \"AccountType\", \"ClassName\"  " +
+                               $"FROM \"AccountClasses\" ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        accountClasses.Add(new AccountClass
+                        {
+                            AccountClassID = reader.GetInt32(reader.GetOrdinal("AccountClassID")),
+                            AccountType = (int)reader["AccountType"],
+                            ClassName = (string)reader["ClassName"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountClasses.Count == 0)
+                return null;
+            return accountClasses;
+        }
     }
 }

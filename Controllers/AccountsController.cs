@@ -40,16 +40,14 @@ namespace Accounts.Controllers
             var accounts =  await _generalLedgerAccountsQuery.GetAllAccounts();
             return Json(accounts);
         }
-
-       /* public async Task<JsonResult> GetAllAccounts2()
-
+        [HttpPost]
+        //public async Task<JsonResult> GetAccountDetails([FromBody] ReadAccountDetailsDto accountID)
+        public async Task<JsonResult> GetAccountDetails([FromBody] int accountID)
         {
-            var items = await _fiscalperiodRepository.GetAccountsDetails();
-            return Json(items);
-        }*/
-        public IActionResult GetAccountDetails()
-        {
-            return View();
+            var accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
+
+            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+            return Json(accountDetails);
         }
         public IActionResult DeleteAccount()
         {
@@ -75,9 +73,19 @@ namespace Accounts.Controllers
         {
             return View();
         }
-        public IActionResult GetActiveCashFlowCategories()
+        public async Task<JsonResult> GetActiveCashFlowCategories()
         {
-            return View();
+            var cashFlowCategories = await _generalLedgerAccountsQuery.GetActiveCashFlowCategories();
+           // ReadCashFlowCategoryDto readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategories);
+
+            //return Json(readCashFlowCategoryDto);
+            return Json(cashFlowCategories);
+        }
+        public async Task<JsonResult> GetAllAccountClasses()
+        {
+            var accountClasses = await _generalLedgerAccountsQuery.GetAllAccountClasses();
+           
+            return Json(accountClasses);
         }
         public IActionResult GetCashFlowCategoryDetails()
         {
@@ -89,14 +97,24 @@ namespace Accounts.Controllers
         }
 
         [HttpPost]      
-        public JsonResult CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
+        //public JsonResult CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
+        public async  Task<JsonResult> CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
         {
             var accountModel = _mapper.Map<AccountDetail>(createUpdateAccountDto);
             _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
             _generalLedgerAccountsCommand.SaveChanges();
 
-            var readAccountDto = _mapper.Map<ReadAccountDto>(accountModel);
-            return Json(readAccountDto);
+            var readAccountDetailsDto = _mapper.Map<ReadAccountDetailsDto>(accountModel);
+            return Json(readAccountDetailsDto);
+        }
+        public async Task<JsonResult> CreateAccountClass([FromBody] CreateAccountClassDto createAccountClassDto)
+        {
+            var accountClassModel = _mapper.Map<AccountClass>(createAccountClassDto);
+            _generalLedgerAccountsCommand.CreateAccountClass(accountClassModel);
+            _generalLedgerAccountsCommand.SaveChanges();
+
+            var readAccountDetailsDto = _mapper.Map<ReadAccountClassDto>(accountClassModel);
+            return Json(readAccountDetailsDto);
         }
         public IActionResult CreateUpdateSubAccount()
         {

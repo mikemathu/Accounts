@@ -55,12 +55,10 @@
                                     <small>Account Class</small>
                                 </label>
                                 <div class=input-group>
-                                    @*<select class="form-control input-sm select-account-class" style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_AccountClassID name=Account.AccountClassID>
-                                        <option value=0>In</option>
-                                        <option value=1>Inventory</option>
-                                        <option value=2>Finance</option>
-                                    </select>*@
-                                    <input class="form-control input-sm" required data-val=true style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_AccountClassID name=Account.AccountClassID>
+                                    <select class="form-control input-sm select-account-class" style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_AccountClassID name=Account.AccountClassID>
+                                      @*  <option value=1>Inventory</option>
+                                        <option value=2>Finance</option>*@
+                                    </select>
 
                                     <span class=input-group-btn>
                                         <a title="Add an account class" class="btn btn-link btn-sm" data-toggle=modal data-target=.add-accountclass-modal>
@@ -73,14 +71,9 @@
                                 <label>
                                     <small>Cash Flow Category</small>
                                 </label>
-                             @*   <select class="form-control input-sm" data-val=true data-val-required="The CashFlowCategoryID field is required." id=Account_CashFlowCategoryID name=Account.CashFlowCategoryID>
-                                         <option value="0"></option>
-                                        <option value="1">PP&E</option>
-                                        <option value="2">Equipments</option>
-                                </select>*@
-
-                                <input class="form-control input-sm" required data-val=true style=width:100% required data-val=true data-val-required="The AccountClassID field is required." id=Account_CashFlowCategoryID name=Account.CashFlowCategoryID>
-
+                                <select class="form-control input-sm" data-val=true data-val-required="The CashFlowCategoryID field is required." id=Account_CashFlowCategoryID name=Account.CashFlowCategoryID>
+                                        @* <option value="0"></option>*@
+                                </select>
                             </div>
                             <div id=updateaccount hidden>
                                 <div class="btn-group btn-group-xs pull-right">
@@ -332,6 +325,8 @@
 </div>
 
 
+@await Html.PartialAsync("./PartialViews/_AddAccountClass")
+
 @*<script src="~/js/Accounts/generalledgeraccounts.js"></script>*@
 
 <script src=" https://webapps1.chicago.gov/cdn/jQuery-3.4.1/jquery-3.4.1.min.js"></script>
@@ -388,7 +383,7 @@ function GetAccountDetails(n) {
         if (t.status) {
             var u = i.accountID
               , e = i.accountNo
-              , r = i.name
+              , r = i.accountName
               , o = i.accountClassID;
             $("#Account_AccountID").val(u);
             $("#Account_AccountNo").val(e);
@@ -505,6 +500,7 @@ function LoadAllBranches() {
     }
     ).catch(n=>Notify(!1, n))
 }
+
 function LoadAllCashFlowCategories() {
     var t = $("#CashFlowCategoryForm input[name=__RequestVerificationToken]").val()
       , n = $("#Account_CashFlowCategoryID");

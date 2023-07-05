@@ -14,6 +14,9 @@ namespace Accounts.Repositories.Command
         {
             _context = context;
         }
+
+       
+
         public void CreateUpdateAccount(AccountDetail account)
         {
             if (account == null)
@@ -22,6 +25,16 @@ namespace Accounts.Repositories.Command
             }
 
             _context.AccountsDetails.Add(account);
+        }
+
+        public void CreateAccountClass(AccountClass accountClass)
+        {
+            if (accountClass == null)
+            {
+                throw new ArgumentNullException(nameof(accountClass));
+            }
+
+            _context.AccountClasses.Add(accountClass);
         }
 
         public bool SaveChanges()

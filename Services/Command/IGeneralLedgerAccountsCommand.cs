@@ -6,5 +6,6 @@ namespace Accounts.Services.Command
     {
         bool SaveChanges();
         void CreateUpdateAccount(AccountDetail account);
+        void CreateAccountClass(AccountClass account);
     }
 }

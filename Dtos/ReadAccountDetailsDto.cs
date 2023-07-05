@@ -1,6 +1,6 @@
 ﻿namespace Accounts.Dtos
 {
-    public class ReadAccountDto
+    public class ReadAccountDetailsDto
     {
         public int AccountClassID { get; set; }
         public int AccountID { get; set; }
