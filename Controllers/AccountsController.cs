@@ -47,11 +47,28 @@ namespace Accounts.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetAccountDetails([FromBody] int accountID)
+        public async Task<IActionResult> GetAccountDetails([FromBody] int accountID)
         {
-            AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
-            ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-            return Json(readAccountDetails);
+            try
+            {   
+                AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
+
+                if (accountDetails != null)
+                {
+                    ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+                    return Json(readAccountDetails);
+                }
+                else
+                {
+                    return Json(null); 
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while retrieving account details.");
+            }
+
+
         }
         public IActionResult DeleteAccount([FromBody] int accountID) 
         {
