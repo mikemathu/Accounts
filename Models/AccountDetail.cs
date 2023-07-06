@@ -5,13 +5,14 @@ namespace Accounts.Models
 {
     public class AccountDetail
     {
-        [Key]
-        public int AccountID { get; set; }
-        public int AccountNo { get; set; }
-
         [ForeignKey("AccountClassID")]
         public AccountClass AccountClass { get; set; }
         public int AccountClassID { get; set; }
+
+        [Key]
+        public int AccountID { get; set; }
+        public int AccountNo { get; set; }
+       
 
         [ForeignKey("CashFlowCategoryID")]
         public CashFlowCategory CashFlowCategory { get; set; }

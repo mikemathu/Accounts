@@ -38,11 +38,7 @@ namespace Accounts.Repositories
                 {
                     while (await reader.ReadAsync())
                     {
-                         AccountClass className= new AccountClass();
-                        className.ClassName = (string)reader["AccountName"];
-
-
-
+                         
                         accounts.Add(new AccountDetail
                         {
                             AccountClass = new AccountClass { ClassName = (string)reader["ClassName"] },

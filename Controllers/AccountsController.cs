@@ -41,20 +41,17 @@ namespace Accounts.Controllers
       
         public async Task<JsonResult> GetAllAccounts()
         {
-            var accounts =  await _generalLedgerAccountsQuery.GetAllAccounts();
-            var readAccountDetails = _mapper.Map<IEnumerable<ReadAccountDetailsDto>>(accounts);
-            return Json(readAccountDetails);
-            //return Json(accounts);
-
+            IEnumerable<AccountDetail> accounts = await _generalLedgerAccountsQuery.GetAllAccounts();
+            IEnumerable<ReadAllAccountsDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadAllAccountsDto>>(accounts);
+            return Json(readAccountDetailsDto);
         }
+
         [HttpPost]
-        //public async Task<JsonResult> GetAccountDetails([FromBody] ReadAccountDetailsDto accountID)
         public async Task<JsonResult> GetAccountDetails([FromBody] int accountID)
         {
-            var accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
-
-            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-            return Json(accountDetails);
+            AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
+            ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+            return Json(readAccountDetails);
         }
         public IActionResult DeleteAccount([FromBody] int accountID) 
         {
