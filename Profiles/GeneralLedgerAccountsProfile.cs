@@ -15,7 +15,7 @@ namespace PlatformService.Profiles
 
             //GeneralLedgerAccounts
             CreateMap<ReadAccountDetailsDto, AccountDetail>().ReverseMap();
-            //CreateMap<AccountDetail, ReadAccountDetailsDto>();
+            //CreateMap<AccountDetail, ReadAccountDetailsListDto>().ReverseMap();
             CreateMap<CreateUpdateAccountDto, AccountDetail>();
             CreateMap<CashFlowCategory, ReadCashFlowCategoryDto>().ReverseMap();
             CreateMap<CreateUpdateSubAccountDto, SubAccountDetail>().ReverseMap();

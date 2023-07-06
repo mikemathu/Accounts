@@ -5,6 +5,7 @@ using Accounts.Services;
 using Accounts.Services.Command;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Diagnostics;
 
 namespace Accounts.Controllers
@@ -35,11 +36,16 @@ namespace Accounts.Controllers
         public IActionResult GeneralLedgerAccounts()
         {
             return View();
-        } 
+        }
+
+      
         public async Task<JsonResult> GetAllAccounts()
         {
             var accounts =  await _generalLedgerAccountsQuery.GetAllAccounts();
-            return Json(accounts);
+            var readAccountDetails = _mapper.Map<IEnumerable<ReadAccountDetailsDto>>(accounts);
+            return Json(readAccountDetails);
+            //return Json(accounts);
+
         }
         [HttpPost]
         //public async Task<JsonResult> GetAccountDetails([FromBody] ReadAccountDetailsDto accountID)
