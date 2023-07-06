@@ -25,6 +25,15 @@ namespace Accounts.Repositories.Command
             }
 
             _context.AccountsDetails.Add(account);
+        }   
+        public void CreateUpdateSubAccount(SubAccountDetail subAccountModel)
+        {
+            if (subAccountModel == null)
+            {
+                throw new ArgumentNullException(nameof(subAccountModel));
+            }
+
+            _context.SubAccountsDetails.Add(subAccountModel);
         }
 
         public void CreateAccountClass(AccountClass accountClass)
@@ -57,6 +66,15 @@ namespace Accounts.Repositories.Command
             _context.Remove(account);
         }
 
+        public CashFlowCategory GetCashFlowCategoryById(int cashFlowCategoryID)
+        {
+            return _context.CashFlowCategories.FirstOrDefault(p => p.CashFlowCategoryID == cashFlowCategoryID);
+        }
+        public void DeleteCashFlowCategory(int cashFlowCategoryID)
+        {
+            var account = GetCashFlowCategoryById(cashFlowCategoryID);
+            _context.Remove(account);
+        }
 
 
 
@@ -64,8 +82,9 @@ namespace Accounts.Repositories.Command
 
 
 
-       
-        
+
+
+
         public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);

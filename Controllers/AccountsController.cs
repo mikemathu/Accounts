@@ -97,13 +97,18 @@ namespace Accounts.Controllers
            
             return Json(accountClasses);
         }
-        public IActionResult GetCashFlowCategoryDetails()
+        public async Task<IActionResult> GetCashFlowCategoryDetails([FromBody] int cashFlowCategoryID)
         {
-            return View();
+            var cashFlowCategoryDetails = await _generalLedgerAccountsQuery.GetCashFlowCategoryDetails(cashFlowCategoryID);
+
+            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+            return Json(cashFlowCategoryDetails);
         } 
-        public IActionResult DeleteCashFlowCategory()
+        public IActionResult DeleteCashFlowCategory([FromBody] int cashFlowCategoryID)
         {
-            return View();
+            _generalLedgerAccountsCommand.DeleteCashFlowCategory(cashFlowCategoryID);
+            _generalLedgerAccountsCommand.SaveChanges();
+            return Ok();
         }
 
         [HttpPost]      
@@ -126,10 +131,14 @@ namespace Accounts.Controllers
             var readAccountDetailsDto = _mapper.Map<ReadAccountClassDto>(accountClassModel);
             return Json(readAccountDetailsDto);
         }
-        public IActionResult CreateUpdateSubAccount()
+        public async Task<JsonResult> CreateUpdateSubAccount([FromBody] CreateUpdateSubAccountDto createUpdateSubAccountDto)
         {
-         
-            return View();
+            var subAccountModel = _mapper.Map<SubAccountDetail>(createUpdateSubAccountDto);
+            _generalLedgerAccountsCommand.CreateUpdateSubAccount(subAccountModel);
+            _generalLedgerAccountsCommand.SaveChanges();
+
+            var readAccountDetailsDto = _mapper.Map<ReadSubAccountDetailsDto>(subAccountModel);
+            return Json(readAccountDetailsDto);
         }
         public IActionResult CreateUpdateCashFlowCategory()
         {

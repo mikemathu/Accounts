@@ -219,6 +219,36 @@ namespace Accounts.Repositories
             return accountSubAccounts;
         }
 
+        public async Task<CashFlowCategory> GetCashFlowCategoryDetails(int cashFlowCategoryID)
+        {
+            OpenConnection();
+            CashFlowCategory cashFlowCategoryDetails = null;
+
+            var commandText = $"SELECT *  " +
+                               $"FROM \"CashFlowCategories\" " +
+                               $"WHERE \"CashFlowCategoryID\" = {cashFlowCategoryID} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        cashFlowCategoryDetails = new CashFlowCategory
+                        {
+                            CashFlowCategoryID = (int)reader["CashFlowCategoryID"],
+                            Name = (string)reader["Name"],
+                            Type = (string)reader["Type"]
+                        };
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (cashFlowCategoryDetails == null)
+                return null;
+            return cashFlowCategoryDetails;
+        }
+
 
     }
 }

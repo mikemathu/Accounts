@@ -10,5 +10,6 @@ namespace Accounts.Services
         Task<IEnumerable<AccountClass>> GetAllAccountClasses();
         Task<IEnumerable<SubAccountDetail>> GetAllSubAccountsByAccountID(int accountID);
         Task<SubAccountDetail> GetSubAccountDetails(int subAccountID);
+        Task<CashFlowCategory> GetCashFlowCategoryDetails(int cashFlowCategoryID);
     }
 }

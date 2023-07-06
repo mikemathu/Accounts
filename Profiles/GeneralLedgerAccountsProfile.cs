@@ -18,6 +18,7 @@ namespace PlatformService.Profiles
             //CreateMap<AccountDetail, ReadAccountDetailsDto>();
             CreateMap<CreateUpdateAccountDto, AccountDetail>();
             CreateMap<CashFlowCategory, ReadCashFlowCategoryDto>().ReverseMap();
+            CreateMap<CreateUpdateSubAccountDto, SubAccountDetail>().ReverseMap();
         }
     }
 }
