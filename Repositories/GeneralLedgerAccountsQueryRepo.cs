@@ -147,5 +147,42 @@ namespace Accounts.Repositories
                 return null;
             return accountClasses;
         }
+
+        public async Task<IEnumerable<SubAccountDetail>> GetAllSubAccountsByAccountID(int accountID)
+        {
+            OpenConnection();
+            List<SubAccountDetail> accountSunAccounts = new List<SubAccountDetail>();
+            /*  var commandText = $"SELECT \"AccountID\", \"ConfigurationType\", \"CurrentBalance\"" +
+                                  $" \"IsActive\", \"IsLocked\", \"Name\"  " +
+                                 $"FROM \"SubAccountsDetails\" " +
+                                 $"WHERE \"AccountID\" = {accountID} ";*/
+            var commandText = $"SELECT *  " +
+                               $"FROM \"SubAccountsDetails\" " +
+                               $"WHERE \"AccountID\" = {accountID} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        accountSunAccounts.Add(new SubAccountDetail
+                        {
+                            AccountID = (int)reader["AccountID"],
+                            ConfigurationType = (int)reader["ConfigurationType"],
+                            CurrentBalance = (int)reader["CurrentBalance"],
+                            IsActive= (int)reader["IsActive"],
+                            IsLocked= (int)reader["IsLocked"],
+                            Name= (string)reader["Name"],
+                            SubAccountID= (int)reader["SubAccountID"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountSunAccounts.Count == 0)
+                return null;
+            return accountSunAccounts;
+        }
     }
 }

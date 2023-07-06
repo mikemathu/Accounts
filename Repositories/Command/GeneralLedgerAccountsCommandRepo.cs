@@ -37,9 +37,21 @@ namespace Accounts.Repositories.Command
             _context.AccountClasses.Add(accountClass);
         }
 
+        public void DeleteAccount(int accountID)
+        {
+            var account = GetAccountById(accountID);
+            _context.Remove(account);
+        }
+        public AccountDetail GetAccountById(int accountID)
+        {
+            return  _context.AccountsDetails.FirstOrDefault(p => p.AccountID == accountID);
+        }
+
         public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);
         }
+
+       
     }
 }

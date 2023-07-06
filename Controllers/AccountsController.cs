@@ -1,5 +1,6 @@
 ﻿using Accounts.Dtos;
 using Accounts.Models;
+using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
 using AutoMapper;
@@ -49,15 +50,19 @@ namespace Accounts.Controllers
             //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
             return Json(accountDetails);
         }
-        public IActionResult DeleteAccount()
+        public IActionResult DeleteAccount([FromBody] int accountID) 
         {
-            return View();
-        }
-        public IActionResult GetAllLedgerAccountsPanelSubAccountsByAccountID()
+            _generalLedgerAccountsCommand.DeleteAccount(accountID);
+            _generalLedgerAccountsCommand.SaveChanges();
+            return Ok();
+    }
+        public async Task<JsonResult> GetAllLedgerAccountsPanelSubAccountsByAccountID([FromBody]int accountID)
         {
-            return View();
+            var accountSunAccounts= await  _generalLedgerAccountsQuery.GetAllSubAccountsByAccountID(accountID);
+
+            return Json(accountSunAccounts);
         }
-        public IActionResult GetSubAccountDetails()
+        public IActionResult GetSubAccountDetails([FromBody] int accountID)
         {
             return View();
         }

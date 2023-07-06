@@ -6,7 +6,7 @@ namespace Accounts.Models
     public class SubAccountDetail
     {
         [Key]
-        public int SuAccountID { get; set; }
+        public int SubAccountID { get; set; }
 
         [ForeignKey("AccountID")]
         public AccountDetail AccountDetail { get; set; }
@@ -18,7 +18,7 @@ namespace Accounts.Models
         public int CurrentBalance { get; set; }
         public int IsActive { get; set; }
         public int IsLocked { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
 
     }
 }

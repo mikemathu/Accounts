@@ -1,5 +1,4 @@
 ﻿using Accounts.Models;
-using Accounts.Models.VM;
 
 namespace Accounts.Services
 {
@@ -9,5 +8,6 @@ namespace Accounts.Services
         Task<IEnumerable<AccountDetail>> GetAllAccounts();
         Task<IEnumerable<CashFlowCategory>> GetActiveCashFlowCategories();
         Task<IEnumerable<AccountClass>> GetAllAccountClasses();
+        Task<IEnumerable<SubAccountDetail>> GetAllSubAccountsByAccountID(int accountID);
     }
 }
