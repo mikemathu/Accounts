@@ -35,6 +35,15 @@ namespace Accounts.Repositories.Command
 
             _context.SubAccountsDetails.Add(subAccountModel);
         }
+        public void CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel)
+        {
+            if (cashFlowCategoryModel == null)
+            {
+                throw new ArgumentNullException(nameof(cashFlowCategoryModel));
+            }
+
+            _context.CashFlowCategories.Add(cashFlowCategoryModel);
+        }
 
         public void CreateAccountClass(AccountClass accountClass)
         {

@@ -140,9 +140,14 @@ namespace Accounts.Controllers
             var readAccountDetailsDto = _mapper.Map<ReadSubAccountDetailsDto>(subAccountModel);
             return Json(readAccountDetailsDto);
         }
-        public IActionResult CreateUpdateCashFlowCategory()
+        public IActionResult CreateUpdateCashFlowCategory([FromBody] CreateUpdateCashFlowCategoryDto createUpdateCashFlowCategoryDto)
         {
-            return View();
+            var cashFlowCategory = _mapper.Map<CashFlowCategory>(createUpdateCashFlowCategoryDto);
+            _generalLedgerAccountsCommand.CreateUpdateCashFlowCategory(cashFlowCategory);
+            _generalLedgerAccountsCommand.SaveChanges();
+
+            var readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategory);
+            return Json(readCashFlowCategoryDto);
         }
 
 
