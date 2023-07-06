@@ -8,5 +8,6 @@ namespace Accounts.Services.Command
         void CreateUpdateAccount(AccountDetail account);
         void CreateAccountClass(AccountClass account);
         void DeleteAccount(int accountID);
+        void DeleteSubAccount(int subAccountID);
     }
 }

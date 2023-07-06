@@ -62,9 +62,12 @@ namespace Accounts.Controllers
 
             return Json(accountSunAccounts);
         }
-        public IActionResult GetSubAccountDetails([FromBody] int accountID)
+        public async Task<IActionResult> GetSubAccountDetails([FromBody] int subAccountID)
         {
-            return View();
+            var subAccountDetails = await _generalLedgerAccountsQuery.GetSubAccountDetails(subAccountID);
+
+            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+            return Json(subAccountDetails);
         }
         public IActionResult ActivateSubAccount()
         {
@@ -74,9 +77,11 @@ namespace Accounts.Controllers
         {
             return View();
         }
-        public IActionResult DeleteSubAccount()
+        public IActionResult DeleteSubAccount([FromBody] int subAccountID)
         {
-            return View();
+            _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
+            _generalLedgerAccountsCommand.SaveChanges();
+             return Ok();
         }
         public async Task<JsonResult> GetActiveCashFlowCategories()
         {

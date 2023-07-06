@@ -184,5 +184,41 @@ namespace Accounts.Repositories
                 return null;
             return accountSunAccounts;
         }
+
+        public async Task<SubAccountDetail> GetSubAccountDetails(int accountID)
+        {
+            OpenConnection();
+            SubAccountDetail accountSubAccounts = null;
+
+            var commandText = $"SELECT *  " +
+                               $"FROM \"SubAccountsDetails\" " +
+                               $"WHERE \"SubAccountID\" = {accountID} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        accountSubAccounts = new SubAccountDetail
+                        {
+                            AccountID = (int)reader["AccountID"],
+                            ConfigurationType = (int)reader["ConfigurationType"],
+                            CurrentBalance = (int)reader["CurrentBalance"],
+                            IsActive = (int)reader["IsActive"],
+                            IsLocked = (int)reader["IsLocked"],
+                            Name = (string)reader["Name"],
+                            SubAccountID = (int)reader["SubAccountID"]
+                        };
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountSubAccounts == null)
+                return null;
+            return accountSubAccounts;
+        }
+
+
     }
 }
