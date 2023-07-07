@@ -59,9 +59,14 @@ namespace Accounts.Repositories.Command
         {
             return _context.AccountsDetails.FirstOrDefault(p => p.AccountID == accountID);
         }
+
+       /* public SubAccountDetail GetSubAccountById(int accountID)
+        {
+            return _context.SubAccountsDetails.FirstOrDefault(p => p.AccountID == accountID);
+        }*/
         public bool DeleteAccount(int accountID)
         {
-            var account = GetAccountById(accountID);
+            var account = GetSubAccountById(accountID);
 
             // Check if the account has associated sub-accounts
             bool hasSubAccounts = _context.SubAccountsDetails.Any(s => s.AccountID == accountID);
@@ -79,10 +84,23 @@ namespace Accounts.Repositories.Command
         {
             return _context.SubAccountsDetails.FirstOrDefault(p => p.SubAccountID == subAccountID);
         }
-        public void DeleteSubAccount(int subAccountID)
+      /*  public void DeleteSubAccount(int subAccountID)
         {
             var account = GetSubAccountById(subAccountID);
             _context.Remove(account);
+        }*/
+
+        public bool DeleteSubAccount(int subAccountID)
+        {
+            var subAccount = GetSubAccountById(subAccountID);
+
+            //if (subAccount != null && subAccount.CurrentBalance == 0)
+            if (subAccount.CurrentBalance == 0)
+            {
+                _context.SubAccountsDetails.Remove(subAccount);
+                return true;
+            }            
+            return false;
         }
 
         public CashFlowCategory GetCashFlowCategoryById(int cashFlowCategoryID)

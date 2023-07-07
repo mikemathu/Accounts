@@ -48,22 +48,13 @@ namespace Accounts.Controllers
 
         [HttpPost]
         public async Task<IActionResult> GetAccountDetails([FromBody] int accountID)
-        {
-             
-            AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
-
-            if (accountDetails != null)
-            {
-                ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-                return Json(readAccountDetails);
-            }
-            else
-            {
-                return Json(null); 
-            }            
+        {             
+            AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);            
+            ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+            return Json(readAccountDetails);                    
 
         }
-        public IActionResult DeleteAccount([FromBody] int accountID) 
+        public async Task<JsonResult> DeleteAccount([FromBody] int accountID) 
         {
 
             bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteAccount(accountID);
@@ -80,16 +71,20 @@ namespace Accounts.Controllers
         }
         public async Task<JsonResult> GetAllLedgerAccountsPanelSubAccountsByAccountID([FromBody]int accountID)
         {
-            var accountSunAccounts= await  _generalLedgerAccountsQuery.GetAllSubAccountsByAccountID(accountID);
-
-            return Json(accountSunAccounts);
+            /*if (accountID <= 0)
+            {
+                return Json(new { message = "Invalid account ID." });
+               
+            }*/            
+            IEnumerable<SubAccountDetail> accountSubAccounts = await _generalLedgerAccountsQuery.GetAllSubAccountsByAccountID(accountID);
+            IEnumerable<ReadSubAccountDetailsDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadSubAccountDetailsDto>>(accountSubAccounts);
+            return Json(readAccountDetailsDto);
         }
         public async Task<IActionResult> GetSubAccountDetails([FromBody] int subAccountID)
         {
-            var subAccountDetails = await _generalLedgerAccountsQuery.GetSubAccountDetails(subAccountID);
-
-            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-            return Json(subAccountDetails);
+            SubAccountDetail subAccountDetails = await _generalLedgerAccountsQuery.GetSubAccountDetails(subAccountID);
+            ReadSubAccountDetailsDto readAccountDetails = _mapper.Map<ReadSubAccountDetailsDto>(subAccountDetails);
+            return Json(readAccountDetails);
         }
         public IActionResult ActivateSubAccount()
         {
@@ -99,11 +94,30 @@ namespace Accounts.Controllers
         {
             return View();
         }
-        public IActionResult DeleteSubAccount([FromBody] int subAccountID)
+       /* public IActionResult DeleteSubAccount([FromBody] int subAccountID)
         {
             _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
             _generalLedgerAccountsCommand.SaveChanges();
              return Ok();
+        }*/
+
+        public async Task<JsonResult> DeleteSubAccount([FromBody] int subAccountID)
+        {
+           /* _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
+            _generalLedgerAccountsCommand.SaveChanges();
+            return Ok();*/
+
+            bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteAccount(subAccountID);
+
+            if (IsAccountDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { status = true, responce = "Account deleted successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Cannot delete the account because it has associated sub-accounts." });
+            }
         }
         public async Task<JsonResult> GetActiveCashFlowCategories()
         {

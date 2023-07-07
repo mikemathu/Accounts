@@ -10,7 +10,7 @@ namespace Accounts.Services.Command
         void CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel);
         void CreateAccountClass(AccountClass account);
         bool DeleteAccount(int accountID);
-        void DeleteSubAccount(int subAccountID);
+        bool DeleteSubAccount(int subAccountID);
         void DeleteCashFlowCategory(int cashFlowCategoryID);
     }
 }
