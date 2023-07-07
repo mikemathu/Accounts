@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Diagnostics;
+using System.Net;
 
 namespace Accounts.Controllers
 {
@@ -103,11 +104,8 @@ namespace Accounts.Controllers
 
         public async Task<JsonResult> DeleteSubAccount([FromBody] int subAccountID)
         {
-           /* _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
-            _generalLedgerAccountsCommand.SaveChanges();
-            return Ok();*/
 
-            bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteAccount(subAccountID);
+            bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
 
             if (IsAccountDeleted)
             {
@@ -116,7 +114,7 @@ namespace Accounts.Controllers
             }
             else
             {
-                return Json(new { status = false, responce = "Cannot delete the account because it has associated sub-accounts." });
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.Conflict, responce = "Cannot delete the Sub Account because it has a Balance. Consider Transfering the balance." });
             }
         }
         public async Task<JsonResult> GetActiveCashFlowCategories()
