@@ -49,33 +49,35 @@ namespace Accounts.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAccountDetails([FromBody] int accountID)
         {
-            try
-            {   
-                AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
+             
+            AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountDetails(accountID);
 
-                if (accountDetails != null)
-                {
-                    ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-                    return Json(readAccountDetails);
-                }
-                else
-                {
-                    return Json(null); 
-                }
-            }
-            catch (Exception ex)
+            if (accountDetails != null)
             {
-                return StatusCode(500, "An error occurred while retrieving account details.");
+                ReadAccountDetailsDto readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
+                return Json(readAccountDetails);
             }
-
+            else
+            {
+                return Json(null); 
+            }            
 
         }
         public IActionResult DeleteAccount([FromBody] int accountID) 
         {
-            _generalLedgerAccountsCommand.DeleteAccount(accountID);
-            _generalLedgerAccountsCommand.SaveChanges();
-            return Ok();
-    }
+
+            bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteAccount(accountID);
+
+            if (IsAccountDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { status = true, responce = "Account deleted successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Cannot delete the account because it has associated sub-accounts." });
+            }
+        }
         public async Task<JsonResult> GetAllLedgerAccountsPanelSubAccountsByAccountID([FromBody]int accountID)
         {
             var accountSunAccounts= await  _generalLedgerAccountsQuery.GetAllSubAccountsByAccountID(accountID);

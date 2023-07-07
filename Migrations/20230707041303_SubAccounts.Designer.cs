@@ -3,6 +3,7 @@ using System;
 using Accounts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accounts.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707041303_SubAccounts")]
+    partial class SubAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,11 +231,16 @@ namespace Accounts.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("SubAccountDetailSubAccountID")
+                        .HasColumnType("integer");
+
                     b.HasKey("SubAccountID");
 
                     b.HasIndex("AccountID");
 
                     b.HasIndex("ConfigurationType");
+
+                    b.HasIndex("SubAccountDetailSubAccountID");
 
                     b.ToTable("SubAccountsDetails");
                 });
@@ -467,7 +475,7 @@ namespace Accounts.Migrations
             modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
                 {
                     b.HasOne("Accounts.Models.AccountDetail", "AccountDetail")
-                        .WithMany("SubAccounts")
+                        .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -477,6 +485,10 @@ namespace Accounts.Migrations
                         .HasForeignKey("ConfigurationType")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Accounts.Models.SubAccountDetail", null)
+                        .WithMany("SubAccounts")
+                        .HasForeignKey("SubAccountDetailSubAccountID");
 
                     b.Navigation("AccountDetail");
 
@@ -534,7 +546,7 @@ namespace Accounts.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Accounts.Models.AccountDetail", b =>
+            modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>
                 {
                     b.Navigation("SubAccounts");
                 });

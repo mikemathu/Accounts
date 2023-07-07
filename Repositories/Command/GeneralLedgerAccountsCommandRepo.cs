@@ -59,10 +59,20 @@ namespace Accounts.Repositories.Command
         {
             return _context.AccountsDetails.FirstOrDefault(p => p.AccountID == accountID);
         }
-        public void DeleteAccount(int accountID)
+        public bool DeleteAccount(int accountID)
         {
             var account = GetAccountById(accountID);
+
+            // Check if the account has associated sub-accounts
+            bool hasSubAccounts = _context.SubAccountsDetails.Any(s => s.AccountID == accountID);
+
+            if (hasSubAccounts)
+            {
+                return false;
+            }
+
             _context.Remove(account);
+            return true;
         }
 
         public SubAccountDetail GetSubAccountById(int subAccountID)

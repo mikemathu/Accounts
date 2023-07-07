@@ -20,5 +20,6 @@ namespace Accounts.Models
         public int IsLocked { get; set; }
         public string Name { get; set; }
 
+
     }
 }

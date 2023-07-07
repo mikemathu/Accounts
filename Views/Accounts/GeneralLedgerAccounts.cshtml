@@ -408,8 +408,10 @@ function DeleteAccount(n) {
       , i = $("#AccountForm input[name=__RequestVerificationToken]").val();
     AjaxServerCallAsync("POST", "/Accounts/DeleteAccount/", t, i, function(t) {
         var i = t.response;
-        t.status ? ($("#accountstable #" + n).remove(),
-        Notify(!0, "Account Deleted Successfully")) : Notify(!1, i)
+        //t.status ? ($("#accountstable #" + n).remove(), //Refer to DeleteAccount() action method
+        i.status ? ($("#accountstable #" + n).remove(),
+        //Notify(!0, "Account Deleted Successfully")) : Notify(!1, i) 
+        Notify(!0, "Account Deleted Successfully")) : Notify(!1, i.responce)
     })
 }
 function LoadAllSubAccountsByAccountID(n) {
