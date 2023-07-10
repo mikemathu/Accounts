@@ -1,5 +1,8 @@
 ﻿using Accounts.Dtos;
+using Accounts.Dtos.Payment_Modes;
+using Accounts.Migrations;
 using Accounts.Models;
+using Accounts.Models.Payment_Modes;
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -263,14 +266,21 @@ namespace Accounts.Controllers
             return View();
         }
 
-        public IActionResult GetPaymentModes()
+        public async Task<IActionResult> GetPaymentModes()
         {
-            return View();
+            IEnumerable<PaymentMode> paymentModes = await _generalLedgerAccountsQuery.GetAllPaymentModes();
+            IEnumerable<ReadAllPaymentModesDto> readAllPaymentModesDto = _mapper.Map<IEnumerable<ReadAllPaymentModesDto>>(paymentModes);
+            return Json(readAllPaymentModesDto);
         }
-        public IActionResult GetPaymentModeDetails()
+
+        [HttpPost]
+        public async Task< IActionResult> GetPaymentModeDetails([FromBody] int paymentModeID)
         {
-            return View();
+            PaymentMode paymentModelDetails = await _generalLedgerAccountsQuery.GetPaymentModeDetails(paymentModeID);
+            ReadPaymentModelDetailsDto readPaymentModelDetailsDto = _mapper.Map<ReadPaymentModelDetailsDto>(paymentModelDetails);
+            return Json(readPaymentModelDetailsDto);
         }
+
         public IActionResult DeletePaymentMode()
         {
             return View();
@@ -300,6 +310,36 @@ namespace Accounts.Controllers
             return View();
         }
         public IActionResult GetInnerMostPaymentModeSelectionLevels()
+        {
+            return View();
+        }
+        public IActionResult CreateUpdatePaymentMode([FromBody] CreateUpdatePaymentModeDto createUpdatePaymentMode)
+        {
+            PaymentMode paymentModel = _mapper.Map<PaymentMode>(createUpdatePaymentMode);
+
+            bool isCreated = _generalLedgerAccountsCommand.CreateUpdatePaymentMode(paymentModel);
+
+
+            if (isCreated)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+
+                //AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(paymentModel);
+
+                CreateUpdateAccountReadDto readAccountDetailsDto = _mapper.Map<CreateUpdateAccountReadDto>(paymentModel);
+                return Json(readAccountDetailsDto);
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account" });
+            }
+        }
+
+        public IActionResult CreatePaymentModeCategory()
+        {
+            return View();
+        }
+        public IActionResult CreateUpdatePaymentModeSelectionLevel()
         {
             return View();
         }

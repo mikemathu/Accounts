@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Accounts.Data;
 using System;
 using System.Security.Principal;
+using Accounts.Models.Payment_Modes;
 
 namespace Accounts.Repositories.Command
 {
@@ -184,7 +185,28 @@ namespace Accounts.Repositories.Command
 
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
 
+        public bool CreateUpdatePaymentMode(PaymentMode paymentMode)
+        {
+            if (paymentMode == null)
+            {
+                throw new ArgumentNullException(nameof(paymentMode));
+            }
+            try
+            {
+                _context.PaymentModes.Add(paymentMode);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
+        }
 
 
 

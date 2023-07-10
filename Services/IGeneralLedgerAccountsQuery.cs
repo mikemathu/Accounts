@@ -1,5 +1,7 @@
 ﻿using Accounts.Dtos;
+using Accounts.Migrations;
 using Accounts.Models;
+using Accounts.Models.Payment_Modes;
 
 namespace Accounts.Services
 {
@@ -13,5 +15,10 @@ namespace Accounts.Services
         Task<SubAccountDetail> GetSubAccountDetails(int subAccountID);
         Task<AccountDetail> GetAccountClassName(AccountDetail accountClassID);
         Task<CashFlowCategory> GetCashFlowCategoryDetails(int cashFlowCategoryID);
+
+        //Payment Modes
+        Task<IEnumerable<PaymentMode>> GetAllPaymentModes(); 
+
+        Task<PaymentMode> GetPaymentModeDetails(int paymentModeID);
     }
 }
