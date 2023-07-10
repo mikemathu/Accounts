@@ -1,4 +1,5 @@
-﻿using Accounts.Models;
+﻿using Accounts.Dtos;
+using Accounts.Models;
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -91,9 +92,14 @@ namespace Accounts.Repositories
         {
             OpenConnection();
             List<CashFlowCategory> cashFlowCategories = new List<CashFlowCategory>();
-            var commandText = $"SELECT \"CashFlowCategoryID\", \"Name\", \"Type\"  " +
-                               $"FROM \"CashFlowCategories\" " +
-                               $"WHERE \"IsActive\" = 1 ";
+            /*      var commandText = $"SELECT \"CashFlowCategoryID\", \"Name\", \"Type\"  " +
+                                     $"FROM \"CashFlowCategories\" " +
+                                     $"WHERE \"IsActive\" = 1 ";*/
+
+            var commandText = "SELECT A.\"CashFlowCategoryID\", A.\"Name\", C.\"TypeName\" " +
+                           "FROM \"CashFlowCategories\" A " +
+                           "JOIN \"AccountTypes\" C ON A.\"AccountTypeID\" = C.\"AccountTypeID\"" +
+                            $"WHERE \"IsActive\" = 1 ";
             using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
             {
                 using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -104,7 +110,7 @@ namespace Accounts.Repositories
                         {
                             CashFlowCategoryID = reader.GetInt32(reader.GetOrdinal("CashFlowCategoryID")),
                             Name = (string)reader["Name"],
-                            Type = (string)reader["Type"]
+                            AccountType = new AccountType { TypeName = (string)reader["TypeName"] }
                         });
                     }
                     reader.Close();
@@ -233,7 +239,7 @@ namespace Accounts.Repositories
                         {
                             CashFlowCategoryID = (int)reader["CashFlowCategoryID"],
                             Name = (string)reader["Name"],
-                            Type = (string)reader["Type"]
+                            //AccountType = new AccountType { TypeName = (string)reader["TypeName"] }
                         };
                     }
                     reader.Close();
@@ -245,6 +251,42 @@ namespace Accounts.Repositories
             return cashFlowCategoryDetails;
         }
 
+        public async Task<AccountDetail> GetAccountClassName(AccountDetail accountClassID)
+        {
+            OpenConnection();
+            AccountDetail accountSubAccounts = null;
+  /*          var commandText2 = "SELECT A.\"AccountName\", A.\"AccountNo\", A.\"AccountID\", C.\"ClassName\" " +
+                        "FROM \"AccountsDetails\" A " +
+                        "JOIN \"AccountClasses\" C ON A.\"AccountClassID\" = C.\"AccountClassID\"";*/
 
+            var commandText = "SELECT A.\"AccountID\", A.\"AccountNo\", A.\"AccountName\", C.\"ClassName\" " +
+                               "FROM \"AccountsDetails\" A " +
+                               "JOIN \"AccountClasses\" C ON A.\"AccountClassID\" = C.\"AccountClassID\"" +
+                                $"WHERE A.\"AccountClassID\" = {accountClassID.AccountClassID}";
+
+            
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        accountSubAccounts = new AccountDetail
+                        {
+                            AccountID = (int)reader["AccountID"],
+                            AccountNo = (int)reader["AccountNo"],
+                            AccountName = (string)reader["AccountName"],
+                            AccountClass = new AccountClass { ClassName = (string)reader["ClassName"] },
+
+                        };
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accountSubAccounts == null)
+                return null;
+            return accountSubAccounts;
+        }
     }
 }

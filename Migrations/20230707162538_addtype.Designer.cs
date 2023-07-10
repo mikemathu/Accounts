@@ -3,6 +3,7 @@ using System;
 using Accounts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accounts.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707162538_addtype")]
+    partial class addtype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,17 +85,17 @@ namespace Accounts.Migrations
 
             modelBuilder.Entity("Accounts.Models.AccountType", b =>
                 {
-                    b.Property<int>("AccountTypeID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AccountTypeID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("TypeName")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("AccountTypeID");
+                    b.HasKey("Id");
 
                     b.ToTable("AccountTypes");
                 });
@@ -105,9 +108,6 @@ namespace Accounts.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CashFlowCategoryID"));
 
-                    b.Property<int>("AccountTypeID")
-                        .HasColumnType("integer");
-
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
@@ -115,9 +115,11 @@ namespace Accounts.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("CashFlowCategoryID");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasIndex("AccountTypeID");
+                    b.HasKey("CashFlowCategoryID");
 
                     b.ToTable("CashFlowCategories");
                 });
@@ -480,17 +482,6 @@ namespace Accounts.Migrations
                     b.Navigation("CashFlowCategory");
 
                     b.Navigation("Configuration");
-                });
-
-            modelBuilder.Entity("Accounts.Models.CashFlowCategory", b =>
-                {
-                    b.HasOne("Accounts.Models.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccountType");
                 });
 
             modelBuilder.Entity("Accounts.Models.SubAccountDetail", b =>

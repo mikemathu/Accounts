@@ -5,12 +5,12 @@ namespace Accounts.Services.Command
     public interface IGeneralLedgerAccountsCommand
     {
         bool SaveChanges();
-        void CreateUpdateAccount(AccountDetail account);
-        void CreateUpdateSubAccount(SubAccountDetail subAccountModel);
-        void CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel);
-        void CreateAccountClass(AccountClass account);
+        bool CreateUpdateAccount(AccountDetail account);
+        bool CreateUpdateSubAccount(SubAccountDetail subAccountModel);
+        bool CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel);
+        bool CreateAccountClass(AccountClass account);
         bool DeleteAccount(int accountID);
         bool DeleteSubAccount(int subAccountID);
-        void DeleteCashFlowCategory(int cashFlowCategoryID);
+        bool DeleteCashFlowCategory(int cashFlowCategoryID);
     }
 }

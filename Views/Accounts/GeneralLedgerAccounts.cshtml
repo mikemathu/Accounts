@@ -739,11 +739,11 @@ $("#AccountForm").submit(function(n) {
         var r = n.response;
         if (n.status) {
             if (i > 0) {
-                let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
+                let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.accountName + '<\/td><td data-title="Account Class">' + r.accountClass.className + "<\/td><\/tr>";
                 $("#accountstable #" + i).replaceWith(n);
                 Notify(!0, "Account Updated Successfully")
             } else {
-                let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.name + '<\/td><td data-title="Account Class">' + r.accountClass + "<\/td><\/tr>";
+                let n = '<tr id="' + r.accountID + '"><td data-title="Account No">' + r.accountNo + '<\/td><td data-title="Account Name">' + r.accountName + '<\/td><td data-title="Account Class">' + r.accountClass.className + "<\/td><\/tr>";
                 accountsTable.row.add($(n)).draw(!1);
                 Notify(!0, "Account Created Successfully");
                 $("#btnCreateNewAccount").click()

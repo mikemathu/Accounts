@@ -3,6 +3,7 @@ using Accounts.Services.Command;
 using Microsoft.EntityFrameworkCore;
 using Accounts.Data;
 using System;
+using System.Security.Principal;
 
 namespace Accounts.Repositories.Command
 {
@@ -17,42 +18,100 @@ namespace Accounts.Repositories.Command
 
        
 
-        public void CreateUpdateAccount(AccountDetail account)
+        public bool CreateUpdateAccount(AccountDetail account)
         {
             if (account == null)
             {
                 throw new ArgumentNullException(nameof(account));
             }
-
-            _context.AccountsDetails.Add(account);
+            try
+            {
+                _context.AccountsDetails.Add(account);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
         }   
-        public void CreateUpdateSubAccount(SubAccountDetail subAccountModel)
+        public bool CreateUpdateSubAccount(SubAccountDetail subAccountModel)
         {
-            if (subAccountModel == null)
+     /*       if (subAccountModel == null)
             {
                 throw new ArgumentNullException(nameof(subAccountModel));
             }
 
-            _context.SubAccountsDetails.Add(subAccountModel);
+            _context.SubAccountsDetails.Add(subAccountModel);*/
+
+            //
+            if (subAccountModel == null)
+            {
+                throw new ArgumentNullException(nameof(subAccountModel));
+            }
+            try
+            {
+                _context.SubAccountsDetails.Add(subAccountModel);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
         }
-        public void CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel)
+        public bool CreateUpdateCashFlowCategory(CashFlowCategory cashFlowCategoryModel)
         {
-            if (cashFlowCategoryModel == null)
+      /*      if (cashFlowCategoryModel == null)
             {
                 throw new ArgumentNullException(nameof(cashFlowCategoryModel));
             }
 
-            _context.CashFlowCategories.Add(cashFlowCategoryModel);
+            _context.CashFlowCategories.Add(cashFlowCategoryModel);*/
+
+            //
+            if (cashFlowCategoryModel == null)
+            {
+                throw new ArgumentNullException(nameof(cashFlowCategoryModel));
+            }
+            try
+            {
+                _context.CashFlowCategories.Add(cashFlowCategoryModel);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
         }
 
-        public void CreateAccountClass(AccountClass accountClass)
+        public bool CreateAccountClass(AccountClass accountClass)
         {
-            if (accountClass == null)
+         /*   if (accountClass == null)
             {
                 throw new ArgumentNullException(nameof(accountClass));
             }
 
-            _context.AccountClasses.Add(accountClass);
+            _context.AccountClasses.Add(accountClass);*/
+
+
+
+            ///
+            if (accountClass == null)
+            {
+                throw new ArgumentNullException(nameof(accountClass));
+            }
+            try
+            {
+                _context.AccountClasses.Add(accountClass);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
         }
 
         public AccountDetail GetAccountById(int accountID)
@@ -109,8 +168,18 @@ namespace Accounts.Repositories.Command
         }
         public void DeleteCashFlowCategory(int cashFlowCategoryID)
         {
-            var account = GetCashFlowCategoryById(cashFlowCategoryID);
-            _context.Remove(account);
+          /*  var account = GetCashFlowCategoryById(cashFlowCategoryID);
+            _context.Remove(account);*/
+
+        /*    var subAccount = GetCashFlowCategoryById(cashFlowCategoryID);
+
+            //if (subAccount != null && subAccount.CurrentBalance == 0)
+            if (subAccount.CurrentBalance == 0)
+            {
+                _context.SubAccountsDetails.Remove(subAccount);
+                return true;
+            }
+            return false;*/
         }
 
 
@@ -127,6 +196,9 @@ namespace Accounts.Repositories.Command
             return (_context.SaveChanges() >= 0);
         }
 
-      
+        bool IGeneralLedgerAccountsCommand.DeleteCashFlowCategory(int cashFlowCategoryID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

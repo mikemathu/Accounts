@@ -23,6 +23,7 @@ namespace Accounts.Data
         public DbSet<JournalVoucher> JournalVouchers { get; set; }
         public DbSet<LetterCase> LetterCases { get; set; }
         public DbSet<SubAccountDetail> SubAccountsDetails { get; set; }
+        public DbSet<AccountType> AccountTypes { get; set; }
     
 
     }

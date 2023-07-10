@@ -95,13 +95,6 @@ namespace Accounts.Controllers
         {
             return View();
         }
-       /* public IActionResult DeleteSubAccount([FromBody] int subAccountID)
-        {
-            _generalLedgerAccountsCommand.DeleteSubAccount(subAccountID);
-            _generalLedgerAccountsCommand.SaveChanges();
-             return Ok();
-        }*/
-
         public async Task<JsonResult> DeleteSubAccount([FromBody] int subAccountID)
         {
 
@@ -110,7 +103,7 @@ namespace Accounts.Controllers
             if (IsAccountDeleted)
             {
                 _generalLedgerAccountsCommand.SaveChanges();
-                return Json(new { status = true, responce = "Account deleted successfully." });
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.OK } );
             }
             else
             {
@@ -119,69 +112,149 @@ namespace Accounts.Controllers
         }
         public async Task<JsonResult> GetActiveCashFlowCategories()
         {
-            var cashFlowCategories = await _generalLedgerAccountsQuery.GetActiveCashFlowCategories();
-           // ReadCashFlowCategoryDto readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategories);
 
-            //return Json(readCashFlowCategoryDto);
-            return Json(cashFlowCategories);
+            IEnumerable<CashFlowCategory> cashFlowCategories = await _generalLedgerAccountsQuery.GetActiveCashFlowCategories();
+            IEnumerable<ReadCashFlowCategoryDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadCashFlowCategoryDto>>(cashFlowCategories);
+
+            return Json(readAccountDetailsDto);
         }
         public async Task<JsonResult> GetAllAccountClasses()
         {
-            var accountClasses = await _generalLedgerAccountsQuery.GetAllAccountClasses();
-           
+            IEnumerable<AccountClass> accountClasses = await _generalLedgerAccountsQuery.GetAllAccountClasses();
+            IEnumerable<ReadAccountClassDto2> readAccountClassDto = _mapper.Map<IEnumerable<ReadAccountClassDto2>>(accountClasses);
+
             return Json(accountClasses);
         }
         public async Task<IActionResult> GetCashFlowCategoryDetails([FromBody] int cashFlowCategoryID)
         {
-            var cashFlowCategoryDetails = await _generalLedgerAccountsQuery.GetCashFlowCategoryDetails(cashFlowCategoryID);
-
-            //var readAccountDetails = _mapper.Map<ReadAccountDetailsDto>(accountDetails);
-            return Json(cashFlowCategoryDetails);
+            CashFlowCategory cashFlowCategoryDetails = await _generalLedgerAccountsQuery.GetCashFlowCategoryDetails(cashFlowCategoryID);
+            ReadCashFlowCategoryDto readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategoryDetails);
+            return Json(readCashFlowCategoryDto);
         } 
-        public IActionResult DeleteCashFlowCategory([FromBody] int cashFlowCategoryID)
+        public async Task<JsonResult> DeleteCashFlowCategory([FromBody] int cashFlowCategoryID)
         {
-            _generalLedgerAccountsCommand.DeleteCashFlowCategory(cashFlowCategoryID);
-            _generalLedgerAccountsCommand.SaveChanges();
-            return Ok();
+            /*   _generalLedgerAccountsCommand.DeleteCashFlowCategory(cashFlowCategoryID);
+               _generalLedgerAccountsCommand.SaveChanges();
+               return Ok();*/
+
+
+            bool IsAccountDeleted = _generalLedgerAccountsCommand.DeleteCashFlowCategory(cashFlowCategoryID);
+
+            if (IsAccountDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.OK });
+            }
+            else
+            {
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.Conflict, responce = "Cannot delete the Sub Account because it has a Balance. Consider Transfering the balance." });
+            }
+
         }
 
         [HttpPost]      
         //public JsonResult CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
         public async  Task<JsonResult> CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
         {
-            var accountModel = _mapper.Map<AccountDetail>(createUpdateAccountDto);
-            _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
+            AccountDetail accountModel = _mapper.Map<AccountDetail>(createUpdateAccountDto);
+/*            _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
             _generalLedgerAccountsCommand.SaveChanges();
 
-            var readAccountDetailsDto = _mapper.Map<ReadAccountDetailsDto>(accountModel);
-            return Json(readAccountDetailsDto);
+            ReadAccountDetailsDto readAccountDetailsDto = _mapper.Map<ReadAccountDetailsDto>(accountModel);
+            return Json(readAccountDetailsDto);*/
+
+            ///
+            bool createUpdateAccount = _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
+
+
+            if (createUpdateAccount)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+
+                AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(accountModel);
+                //SubAccountDetail subAccountDetails = await _generalLedgerAccountsQuery.GetSubAccountDetails(subAccountID);
+
+                CreateUpdateAccountReadDto readAccountDetailsDto = _mapper.Map<CreateUpdateAccountReadDto>(accountDetails);
+               return Json( readAccountDetailsDto );
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account" });
+            }
         }
         public async Task<JsonResult> CreateAccountClass([FromBody] CreateAccountClassDto createAccountClassDto)
         {
-            var accountClassModel = _mapper.Map<AccountClass>(createAccountClassDto);
-            _generalLedgerAccountsCommand.CreateAccountClass(accountClassModel);
+            AccountClass accountClassModel = _mapper.Map<AccountClass>(createAccountClassDto);
+            /*_generalLedgerAccountsCommand.CreateAccountClass(accountClassModel);
             _generalLedgerAccountsCommand.SaveChanges();
 
-            var readAccountDetailsDto = _mapper.Map<ReadAccountClassDto>(accountClassModel);
-            return Json(readAccountDetailsDto);
+            ReadAccountClassDto readAccountDetailsDto = _mapper.Map<ReadAccountClassDto>(accountClassModel);
+            return Json(readAccountDetailsDto);*/
+
+
+            ///
+            bool createAccountClass = _generalLedgerAccountsCommand.CreateAccountClass(accountClassModel);
+
+
+            if (createAccountClass)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                ReadAccountClassDto readAccountDetailsDto = _mapper.Map<ReadAccountClassDto>(accountClassModel);
+                return Json(new { readAccountDetailsDto, status = true, responce = "Account Created successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account class" });
+            }
         }
         public async Task<JsonResult> CreateUpdateSubAccount([FromBody] CreateUpdateSubAccountDto createUpdateSubAccountDto)
         {
             var subAccountModel = _mapper.Map<SubAccountDetail>(createUpdateSubAccountDto);
-            _generalLedgerAccountsCommand.CreateUpdateSubAccount(subAccountModel);
+     /*       _generalLedgerAccountsCommand.CreateUpdateSubAccount(subAccountModel);
             _generalLedgerAccountsCommand.SaveChanges();
 
             var readAccountDetailsDto = _mapper.Map<ReadSubAccountDetailsDto>(subAccountModel);
-            return Json(readAccountDetailsDto);
+            return Json(readAccountDetailsDto);*/
+
+            //
+            bool createUpdateSubAccount = _generalLedgerAccountsCommand.CreateUpdateSubAccount(subAccountModel);
+
+
+            if (createUpdateSubAccount)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                ReadSubAccountDetailsDto readAccountDetailsDto = _mapper.Map<ReadSubAccountDetailsDto>(subAccountModel);
+                return Json(new { readAccountDetailsDto, status = true, responce = "Sub Account Created successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account class" });
+            }
         }
         public IActionResult CreateUpdateCashFlowCategory([FromBody] CreateUpdateCashFlowCategoryDto createUpdateCashFlowCategoryDto)
         {
             var cashFlowCategory = _mapper.Map<CashFlowCategory>(createUpdateCashFlowCategoryDto);
-            _generalLedgerAccountsCommand.CreateUpdateCashFlowCategory(cashFlowCategory);
+      /*      _generalLedgerAccountsCommand.CreateUpdateCashFlowCategory(cashFlowCategory);
             _generalLedgerAccountsCommand.SaveChanges();
 
             var readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategory);
-            return Json(readCashFlowCategoryDto);
+            return Json(readCashFlowCategoryDto);*/
+
+            //
+
+            bool createUpdateSubAccount = _generalLedgerAccountsCommand.CreateUpdateCashFlowCategory(cashFlowCategory);
+
+
+            if (createUpdateSubAccount)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                ReadCashFlowCategoryDto readCashFlowCategoryDto = _mapper.Map<ReadCashFlowCategoryDto>(cashFlowCategory);
+                return Json(new { readCashFlowCategoryDto, status = true, responce = "Sub Account Created successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account class" });
+            }
         }
 
 
