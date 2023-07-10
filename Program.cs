@@ -60,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Accounts}/{action=GeneralLedgerAccounts}/{id?}");
+    pattern: "{controller=Accounts}/{action=PaymentModes}/{id?}");
 app.MapRazorPages();
 
 app.Run();

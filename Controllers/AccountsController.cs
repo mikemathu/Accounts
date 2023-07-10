@@ -157,13 +157,7 @@ namespace Accounts.Controllers
         public async  Task<JsonResult> CreateUpdateAccount([FromBody] CreateUpdateAccountDto createUpdateAccountDto)
         {
             AccountDetail accountModel = _mapper.Map<AccountDetail>(createUpdateAccountDto);
-/*            _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
-            _generalLedgerAccountsCommand.SaveChanges();
 
-            ReadAccountDetailsDto readAccountDetailsDto = _mapper.Map<ReadAccountDetailsDto>(accountModel);
-            return Json(readAccountDetailsDto);*/
-
-            ///
             bool createUpdateAccount = _generalLedgerAccountsCommand.CreateUpdateAccount(accountModel);
 
 
@@ -172,7 +166,6 @@ namespace Accounts.Controllers
                 _generalLedgerAccountsCommand.SaveChanges();
 
                 AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(accountModel);
-                //SubAccountDetail subAccountDetails = await _generalLedgerAccountsQuery.GetSubAccountDetails(subAccountID);
 
                 CreateUpdateAccountReadDto readAccountDetailsDto = _mapper.Map<CreateUpdateAccountReadDto>(accountDetails);
                return Json( readAccountDetailsDto );
@@ -258,5 +251,57 @@ namespace Accounts.Controllers
         }
 
 
+
+        /// <summary>
+        /// PaymentModes
+        /// </summary>
+        /// <returns></returns>
+
+
+        public IActionResult PaymentModes()
+        {
+            return View();
+        }
+
+        public IActionResult GetPaymentModes()
+        {
+            return View();
+        }
+        public IActionResult GetPaymentModeDetails()
+        {
+            return View();
+        }
+        public IActionResult DeletePaymentMode()
+        {
+            return View();
+        }
+        public IActionResult GetBankAndCashSubAccounts()
+        {
+            return View();
+        }
+        public IActionResult GetAllPaymentModeCategories()
+        {
+            return View();
+        }
+        public IActionResult GetPaymentModeSelectionLevels()
+        {
+            return View();
+        }
+        public IActionResult GetPaymentModeSelectionLevelsByLevel()
+        {
+            return View();
+        }
+        public IActionResult GetPaymentModeSelectionLevelDetails()
+        {
+            return View();
+        }
+        public IActionResult DeletePaymentModeSelectionLevel()
+        {
+            return View();
+        }
+        public IActionResult GetInnerMostPaymentModeSelectionLevels()
+        {
+            return View();
+        }
     }
 }
