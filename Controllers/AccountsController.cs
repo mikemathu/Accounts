@@ -1,14 +1,5 @@
 ﻿using Accounts.Dtos;
-<<<<<<< HEAD
-using Accounts.Dtos.Banks;
 using Accounts.Models;
-using Accounts.Models.Banks;
-=======
-using Accounts.Dtos.Payment_Modes;
-using Accounts.Migrations;
-using Accounts.Models;
-using Accounts.Models.Payment_Modes;
->>>>>>> f04513da27eb886490b2efca930f26d1001200be
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -274,16 +265,7 @@ namespace Accounts.Controllers
 
         public async Task<IActionResult> GetPaymentModes()
         {
-<<<<<<< HEAD
-            /*    IEnumerable<AccountDetail> accounts = await _generalLedgerAccountsQuery.GetAllAccounts();
-                IEnumerable<ReadAllAccountsDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadAllAccountsDto>>(accounts);
-                return Json(readAccountDetailsDto);*/
             return View();
-=======
-            IEnumerable<PaymentMode> paymentModes = await _generalLedgerAccountsQuery.GetAllPaymentModes();
-            IEnumerable<ReadAllPaymentModesDto> readAllPaymentModesDto = _mapper.Map<IEnumerable<ReadAllPaymentModesDto>>(paymentModes);
-            return Json(readAllPaymentModesDto);
->>>>>>> f04513da27eb886490b2efca930f26d1001200be
         }
 
         [HttpPost]
@@ -338,104 +320,5 @@ namespace Accounts.Controllers
         {
             return View();
         }
-<<<<<<< HEAD
-
-
-
-        //Banks
-        public IActionResult Banks()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> GetAllBanks() //GetAllBranchBanks()
-        {
-            IEnumerable<Bank> bank = await _generalLedgerAccountsQuery.GetAllBanks();
-            IEnumerable<ReadAllBankDto> readAllBankDto = _mapper.Map<IEnumerable<ReadAllBankDto>>(bank);
-            return Json(readAllBankDto);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetBankDetails([FromBody] int bankID)
-        {
-            Bank accountDetails = await _generalLedgerAccountsQuery.GetBankDetails(bankID);
-            ReadBankDetailsDto readBankDetailsDto = _mapper.Map<ReadBankDetailsDto>(accountDetails);
-            return Json(readBankDetailsDto);
-        }
-        public IActionResult DeleteBank([FromBody] int bankID)
-        {
-            bool IsBankDeleted = _generalLedgerAccountsCommand.DeleteBank(bankID);
-
-            if (IsBankDeleted)
-            {
-                _generalLedgerAccountsCommand.SaveChanges();
-                return Json(new { status = true, responce = "Account deleted successfully." });
-            }
-            else
-            {
-                return Json(new { status = false, responce = "Cannot delete the account because it has associated sub-accounts." });
-            }
-        }
-
-        public async Task<IActionResult> CreateUpdateBank([FromBody] CreateUpdateBankDto createUpdateBankDto)
-        {
-            Bank bankModel = _mapper.Map<Bank>(createUpdateBankDto);
-
-            bool createUpdateBank = _generalLedgerAccountsCommand.CreateUpdateBank(bankModel);
-
-
-            if (createUpdateBank)
-            {
-                _generalLedgerAccountsCommand.SaveChanges();
-
-                //AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(accountModel);
-
-                CreateUpdateBankReadDto createUpdateBankReadDto = _mapper.Map<CreateUpdateBankReadDto>(bankModel);
-                return Json(createUpdateBankReadDto);
-=======
-        public IActionResult CreateUpdatePaymentMode([FromBody] CreateUpdatePaymentModeDto createUpdatePaymentMode)
-        {
-            PaymentMode paymentModel = _mapper.Map<PaymentMode>(createUpdatePaymentMode);
-
-            bool isCreated = _generalLedgerAccountsCommand.CreateUpdatePaymentMode(paymentModel);
-
-
-            if (isCreated)
-            {
-                _generalLedgerAccountsCommand.SaveChanges();
-
-                //AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(paymentModel);
-
-                CreateUpdateAccountReadDto readAccountDetailsDto = _mapper.Map<CreateUpdateAccountReadDto>(paymentModel);
-                return Json(readAccountDetailsDto);
->>>>>>> f04513da27eb886490b2efca930f26d1001200be
-            }
-            else
-            {
-                return Json(new { status = false, responce = "Could Not Create account" });
-            }
-        }
-
-<<<<<<< HEAD
-
-        //CASHIER SHIFTS
-        public IActionResult CashierShifts()
-        {
-            return View();
-        }
-
-
-
-
-=======
-        public IActionResult CreatePaymentModeCategory()
-        {
-            return View();
-        }
-        public IActionResult CreateUpdatePaymentModeSelectionLevel()
-        {
-            return View();
-        }
->>>>>>> f04513da27eb886490b2efca930f26d1001200be
     }
 }
