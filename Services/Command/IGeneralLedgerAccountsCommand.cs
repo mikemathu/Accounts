@@ -15,6 +15,7 @@ namespace Accounts.Services.Command
         bool DeleteCashFlowCategory(int cashFlowCategoryID);
 
         //Payment Mode CreateUpdatePaymentMode
-        bool CreateUpdatePaymentMode(PaymentMode account);
+        bool CreateUpdatePaymentMode(PaymentMode account); 
+        bool DeletePaymentMode(int paymentModeID);
     }
 }

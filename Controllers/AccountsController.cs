@@ -281,10 +281,22 @@ namespace Accounts.Controllers
             return Json(readPaymentModelDetailsDto);
         }
 
-        public IActionResult DeletePaymentMode()
+        public IActionResult DeletePaymentMode([FromBody] int paymentModeID)
         {
-            return View();
+
+            bool IsPaymentModeDeleted = _generalLedgerAccountsCommand.DeletePaymentMode(paymentModeID);
+
+            if (IsPaymentModeDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.OK });
+            }
+            else
+            {
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.Conflict, responce = "Cannot delete the Sub Account because it has a Balance. Consider Transfering the balance." });
+            }
         }
+
         public IActionResult GetBankAndCashSubAccounts()
         {
             return View();
