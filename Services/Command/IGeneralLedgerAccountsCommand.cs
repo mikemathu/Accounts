@@ -1,4 +1,5 @@
 ﻿using Accounts.Models;
+using Accounts.Models.Payment_Modes;
 
 namespace Accounts.Services.Command
 {
@@ -12,5 +13,9 @@ namespace Accounts.Services.Command
         bool DeleteAccount(int accountID);
         bool DeleteSubAccount(int subAccountID);
         bool DeleteCashFlowCategory(int cashFlowCategoryID);
+
+        //Payment Mode CreateUpdatePaymentMode
+        bool CreateUpdatePaymentMode(PaymentMode account); 
+        bool DeletePaymentMode(int paymentModeID);
     }
 }

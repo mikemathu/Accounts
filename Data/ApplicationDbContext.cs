@@ -1,4 +1,5 @@
 ﻿using Accounts.Models;
+using Accounts.Models.Payment_Modes;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,14 @@ namespace Accounts.Data
         public DbSet<LetterCase> LetterCases { get; set; }
         public DbSet<SubAccountDetail> SubAccountsDetails { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
-    
+
+        //PaymentModes
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentMode> PaymentModes { get; set; }
+        public DbSet<PaymentModeCategory> PaymentModeCategories { get; set; }
+        public DbSet<PaymentModeSelectionLevel> PaymentModeSelectionLevels { get; set; }
+        public DbSet<SubAccount> SubAccounts { get; set; }
+
 
     }
 }

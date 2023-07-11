@@ -2,7 +2,7 @@
 
 namespace Accounts.Models.Payment_Modes
 {
-    public class PaymentModeCategoty
+    public class PaymentModeCategory
     {
         public string PaymentModeCategotyName { get; set; }
         [Key]

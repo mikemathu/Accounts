@@ -1,5 +1,6 @@
 ﻿using Accounts.Dtos;
 using Accounts.Models;
+using Accounts.Models.Payment_Modes;
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -287,6 +288,42 @@ namespace Accounts.Repositories
             if (accountSubAccounts == null)
                 return null;
             return accountSubAccounts;
+        }
+
+        ////
+        ///Payment Modes
+        ///
+        public async Task<IEnumerable<PaymentMode>> GetAllPaymentModes()
+        {
+            OpenConnection();
+            List<PaymentMode> accounts = new List<PaymentMode>();
+
+            var commandText = $"SELECT * " +
+                              $"FROM \"PaymentModes\" ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+
+                        accounts.Add(new PaymentMode
+                        {
+                            CanBeReceived = (string)reader["CanBeReceived"],
+                            Category = (string)reader["Category"],
+                            IsDefault = (string)reader["IsDefault"],
+                            PaymentModeName = (string)reader["PaymentModeName"],
+                            PaymentID = (int)reader["PaymentID"],
+                            SubAcc = (string)reader["AccountName"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (accounts.Count == 0)
+                return null;
+            return accounts;
         }
     }
 }
