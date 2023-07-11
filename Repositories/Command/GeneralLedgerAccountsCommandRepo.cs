@@ -4,7 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Accounts.Data;
 using System;
 using System.Security.Principal;
+<<<<<<< HEAD
 using Accounts.Models.Banks;
+=======
+using Accounts.Models.Payment_Modes;
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 
 namespace Accounts.Repositories.Command
 {
@@ -185,6 +189,7 @@ namespace Accounts.Repositories.Command
 
 
 
+<<<<<<< HEAD
         //BANK
         public bool CreateUpdateBank(Bank bank)
         {
@@ -226,7 +231,30 @@ namespace Accounts.Repositories.Command
 
 
 
+=======
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 
+        public bool CreateUpdatePaymentMode(PaymentMode paymentMode)
+        {
+            if (paymentMode == null)
+            {
+                throw new ArgumentNullException(nameof(paymentMode));
+            }
+            try
+            {
+                _context.PaymentModes.Add(paymentMode);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
+        }
 
 
 

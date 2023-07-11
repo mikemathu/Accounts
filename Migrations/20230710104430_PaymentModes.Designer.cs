@@ -3,6 +3,7 @@ using System;
 using Accounts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Accounts.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230710104430_PaymentModes")]
+    partial class PaymentModes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,45 +98,6 @@ namespace Accounts.Migrations
                     b.HasKey("AccountTypeID");
 
                     b.ToTable("AccountTypes");
-                });
-
-            modelBuilder.Entity("Accounts.Models.Banks.Bank", b =>
-                {
-                    b.Property<int>("BankID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BankID"));
-
-                    b.Property<int>("AccountNo")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("BankCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Branch")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("BranchCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("CompanyBranchID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SubAccountID")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("BankID");
-
-                    b.ToTable("Banks");
                 });
 
             modelBuilder.Entity("Accounts.Models.CashFlowCategory", b =>

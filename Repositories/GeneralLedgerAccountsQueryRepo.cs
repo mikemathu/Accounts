@@ -1,6 +1,10 @@
 ﻿using Accounts.Dtos;
 using Accounts.Models;
+<<<<<<< HEAD
 using Accounts.Models.Banks;
+=======
+using Accounts.Models.Payment_Modes;
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -290,6 +294,7 @@ namespace Accounts.Repositories
             return accountSubAccounts;
         }
 
+<<<<<<< HEAD
 
 
         ///Banks
@@ -300,6 +305,18 @@ namespace Accounts.Repositories
             List<Bank> bank = new List<Bank>();
             var commandText = "SELECT * " +
                               "FROM \"Banks\" A ";
+=======
+        ////
+        ///Payment Modes
+        ///
+        public async Task<IEnumerable<PaymentMode>> GetAllPaymentModes()
+        {
+            OpenConnection();
+            List<PaymentMode> accounts = new List<PaymentMode>();
+
+            var commandText = $"SELECT * " +
+                              $"FROM \"PaymentModes\" ";
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
             using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
             {
                 using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -307,6 +324,7 @@ namespace Accounts.Repositories
                     while (await reader.ReadAsync())
                     {
 
+<<<<<<< HEAD
                         bank.Add(new Bank
                         {
                             AccountNo = (int)reader["AccountNo"],
@@ -317,12 +335,23 @@ namespace Accounts.Repositories
                             CompanyBranchID = (int)reader["CompanyBranchID"],
                             Name = (string)reader["Name"],
                             SubAccountID = (string)reader["AccountName"]
+=======
+                        accounts.Add(new PaymentMode
+                        {
+                            CanBeReceived = (string)reader["CanBeReceived"],
+                            Category = (string)reader["Category"],
+                            IsDefault = (string)reader["IsDefault"],
+                            PaymentModeName = (string)reader["PaymentModeName"],
+                            PaymentID = (int)reader["PaymentID"],
+                            SubAcc = (string)reader["AccountName"]
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
                         });
                     }
                     reader.Close();
                 }
                 _connection.Close();
             }
+<<<<<<< HEAD
             if (bank.Count == 0)
                 return null;
             return bank;
@@ -363,5 +392,11 @@ namespace Accounts.Repositories
 
 
 
+=======
+            if (accounts.Count == 0)
+                return null;
+            return accounts;
+        }
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
     }
 }

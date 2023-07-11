@@ -1,7 +1,14 @@
 ﻿using Accounts.Dtos;
+<<<<<<< HEAD
 using Accounts.Dtos.Banks;
 using Accounts.Models;
 using Accounts.Models.Banks;
+=======
+using Accounts.Dtos.Payment_Modes;
+using Accounts.Migrations;
+using Accounts.Models;
+using Accounts.Models.Payment_Modes;
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -265,21 +272,44 @@ namespace Accounts.Controllers
             return View();
         }
 
-        public IActionResult GetPaymentModes()
+        public async Task<IActionResult> GetPaymentModes()
         {
+<<<<<<< HEAD
             /*    IEnumerable<AccountDetail> accounts = await _generalLedgerAccountsQuery.GetAllAccounts();
                 IEnumerable<ReadAllAccountsDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadAllAccountsDto>>(accounts);
                 return Json(readAccountDetailsDto);*/
             return View();
+=======
+            IEnumerable<PaymentMode> paymentModes = await _generalLedgerAccountsQuery.GetAllPaymentModes();
+            IEnumerable<ReadAllPaymentModesDto> readAllPaymentModesDto = _mapper.Map<IEnumerable<ReadAllPaymentModesDto>>(paymentModes);
+            return Json(readAllPaymentModesDto);
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
         }
-        public IActionResult GetPaymentModeDetails()
+
+        [HttpPost]
+        public async Task< IActionResult> GetPaymentModeDetails([FromBody] int paymentModeID)
         {
-            return View();
+            PaymentMode paymentModelDetails = await _generalLedgerAccountsQuery.GetPaymentModeDetails(paymentModeID);
+            ReadPaymentModelDetailsDto readPaymentModelDetailsDto = _mapper.Map<ReadPaymentModelDetailsDto>(paymentModelDetails);
+            return Json(readPaymentModelDetailsDto);
         }
-        public IActionResult DeletePaymentMode()
+
+        public IActionResult DeletePaymentMode([FromBody] int paymentModeID)
         {
-            return View();
+
+            bool IsPaymentModeDeleted = _generalLedgerAccountsCommand.DeletePaymentMode(paymentModeID);
+
+            if (IsPaymentModeDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.OK });
+            }
+            else
+            {
+                return Json(new { StatusCode = Response.StatusCode = (int)HttpStatusCode.Conflict, responce = "Cannot delete the Sub Account because it has a Balance. Consider Transfering the balance." });
+            }
         }
+
         public IActionResult GetBankAndCashSubAccounts()
         {
             return View();
@@ -308,6 +338,7 @@ namespace Accounts.Controllers
         {
             return View();
         }
+<<<<<<< HEAD
 
 
 
@@ -361,6 +392,23 @@ namespace Accounts.Controllers
 
                 CreateUpdateBankReadDto createUpdateBankReadDto = _mapper.Map<CreateUpdateBankReadDto>(bankModel);
                 return Json(createUpdateBankReadDto);
+=======
+        public IActionResult CreateUpdatePaymentMode([FromBody] CreateUpdatePaymentModeDto createUpdatePaymentMode)
+        {
+            PaymentMode paymentModel = _mapper.Map<PaymentMode>(createUpdatePaymentMode);
+
+            bool isCreated = _generalLedgerAccountsCommand.CreateUpdatePaymentMode(paymentModel);
+
+
+            if (isCreated)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+
+                //AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(paymentModel);
+
+                CreateUpdateAccountReadDto readAccountDetailsDto = _mapper.Map<CreateUpdateAccountReadDto>(paymentModel);
+                return Json(readAccountDetailsDto);
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
             }
             else
             {
@@ -368,6 +416,7 @@ namespace Accounts.Controllers
             }
         }
 
+<<<<<<< HEAD
 
         //CASHIER SHIFTS
         public IActionResult CashierShifts()
@@ -378,5 +427,15 @@ namespace Accounts.Controllers
 
 
 
+=======
+        public IActionResult CreatePaymentModeCategory()
+        {
+            return View();
+        }
+        public IActionResult CreateUpdatePaymentModeSelectionLevel()
+        {
+            return View();
+        }
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
     }
 }

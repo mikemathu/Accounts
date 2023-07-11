@@ -1,5 +1,9 @@
 ﻿using Accounts.Models;
+<<<<<<< HEAD
 using Accounts.Models.Banks;
+=======
+using Accounts.Models.Payment_Modes;
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,9 +30,18 @@ namespace Accounts.Data
         public DbSet<SubAccountDetail> SubAccountsDetails { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
 
+<<<<<<< HEAD
 
         //Banks
         public DbSet<Bank> Banks { get; set; }
+=======
+        //PaymentModes
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentMode> PaymentModes { get; set; }
+        public DbSet<PaymentModeCategory> PaymentModeCategories { get; set; }
+        public DbSet<PaymentModeSelectionLevel> PaymentModeSelectionLevels { get; set; }
+        public DbSet<SubAccount> SubAccounts { get; set; }
+>>>>>>> f04513da27eb886490b2efca930f26d1001200be
 
 
     }
