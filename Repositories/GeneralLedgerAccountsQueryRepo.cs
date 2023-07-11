@@ -1,5 +1,6 @@
 ﻿using Accounts.Dtos;
 using Accounts.Models;
+using Accounts.Models.Banks;
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -288,5 +289,79 @@ namespace Accounts.Repositories
                 return null;
             return accountSubAccounts;
         }
+
+
+
+        ///Banks
+        ///
+        public async Task<IEnumerable<Bank>> GetAllBanks()
+        {
+            OpenConnection();
+            List<Bank> bank = new List<Bank>();
+            var commandText = "SELECT * " +
+                              "FROM \"Banks\" A ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+
+                        bank.Add(new Bank
+                        {
+                            AccountNo = (int)reader["AccountNo"],
+                            BankCode = (string)reader["BankCode"],
+                            BankID = (int)reader["BankID"],
+                            Branch = (string)reader["Branch"],
+                            BranchCode = (string)reader["BranchCode"],
+                            CompanyBranchID = (int)reader["CompanyBranchID"],
+                            Name = (string)reader["Name"],
+                            SubAccountID = (string)reader["AccountName"]
+                        });
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (bank.Count == 0)
+                return null;
+            return bank;
+        }
+
+        public async Task<Bank> GetBankDetails(int bankID)
+        {
+            OpenConnection();
+            Bank bankDetails = null;
+
+            var commandText = $"SELECT \"BankID\", \"Name\", \"BankCode\", \"AccountNo\",  \"Branch\",  \"BranchCode\"  " +
+                               $"FROM \"Banks\" " +
+                               $"WHERE \"BankID\" = {bankID} ";
+            using (NpgsqlCommand command = new NpgsqlCommand(commandText, _connection))
+            {
+                using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        bankDetails = new Bank
+                        {
+                            BankID = (int)reader["BankID"],
+                            Name = (string)reader["Name"],
+                            BankCode = (string)reader["BankCode"],
+                            AccountNo = (int)reader["AccountNo"],
+                            Branch = (string)reader["Branch"],
+                            BranchCode = (string)reader["BranchCode"]
+                        };
+                    }
+                    reader.Close();
+                }
+                _connection.Close();
+            }
+            if (bankDetails == null)
+                return null;
+            return bankDetails;
+        }
+
+
+
     }
 }

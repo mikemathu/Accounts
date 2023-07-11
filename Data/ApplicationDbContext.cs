@@ -1,4 +1,5 @@
 ﻿using Accounts.Models;
+using Accounts.Models.Banks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,11 @@ namespace Accounts.Data
         public DbSet<LetterCase> LetterCases { get; set; }
         public DbSet<SubAccountDetail> SubAccountsDetails { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
-    
+
+
+        //Banks
+        public DbSet<Bank> Banks { get; set; }
+
 
     }
 }

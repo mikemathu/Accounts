@@ -1,5 +1,7 @@
 using Accounts.Dtos;
+using Accounts.Dtos.Banks;
 using Accounts.Models;
+using Accounts.Models.Banks;
 using Accounts.Models.VM;
 using AutoMapper;
 
@@ -26,6 +28,13 @@ namespace PlatformService.Profiles
             CreateMap<CashFlowCategory, ReadCashFlowCategoryDto>().ReverseMap();
             CreateMap<CreateUpdateSubAccountDto, SubAccountDetail>().ReverseMap();
             CreateMap<CreateUpdateCashFlowCategoryDto, CashFlowCategory>().ReverseMap();
+
+
+            //Banks
+            CreateMap<Bank, ReadAllBankDto>().ReverseMap();
+            CreateMap<Bank, ReadBankDetailsDto>().ReverseMap();
+            CreateMap<Bank, CreateUpdateBankReadDto>().ReverseMap();
+
         }
     }
 }

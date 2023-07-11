@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Accounts.Data;
 using System;
 using System.Security.Principal;
+using Accounts.Models.Banks;
 
 namespace Accounts.Repositories.Command
 {
@@ -180,6 +181,47 @@ namespace Accounts.Repositories.Command
                 return true;
             }
             return false;*/
+        }
+
+
+
+        //BANK
+        public bool CreateUpdateBank(Bank bank)
+        {
+            if (bank == null)
+            {
+                throw new ArgumentNullException(nameof(bank));
+            }
+            try
+            {
+                _context.Banks.Add(bank);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //throw new ArgumentNullException();
+                return false;
+            }
+        }
+
+        public Bank GetBankById(int bankID)
+        {
+            return _context.Banks.FirstOrDefault(p => p.BankID == bankID);
+        }
+        public bool DeleteBank(int bankID)
+        {
+            Bank bank = GetBankById(bankID);
+
+            // Check if the account has associated sub-accounts
+            //bool hasSubAccounts = _context.SubAccountsDetails.Any(s => s.AccountID == bankID);
+
+          /*  if (hasSubAccounts)
+            {
+                return false;
+            }*/
+
+            _context.Remove(bank);
+            return true;
         }
 
 

@@ -1,5 +1,7 @@
 ﻿using Accounts.Dtos;
+using Accounts.Dtos.Banks;
 using Accounts.Models;
+using Accounts.Models.Banks;
 using Accounts.Models.VM;
 using Accounts.Services;
 using Accounts.Services.Command;
@@ -265,6 +267,9 @@ namespace Accounts.Controllers
 
         public IActionResult GetPaymentModes()
         {
+            /*    IEnumerable<AccountDetail> accounts = await _generalLedgerAccountsQuery.GetAllAccounts();
+                IEnumerable<ReadAllAccountsDto> readAccountDetailsDto = _mapper.Map<IEnumerable<ReadAllAccountsDto>>(accounts);
+                return Json(readAccountDetailsDto);*/
             return View();
         }
         public IActionResult GetPaymentModeDetails()
@@ -303,5 +308,75 @@ namespace Accounts.Controllers
         {
             return View();
         }
+
+
+
+        //Banks
+        public IActionResult Banks()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> GetAllBanks() //GetAllBranchBanks()
+        {
+            IEnumerable<Bank> bank = await _generalLedgerAccountsQuery.GetAllBanks();
+            IEnumerable<ReadAllBankDto> readAllBankDto = _mapper.Map<IEnumerable<ReadAllBankDto>>(bank);
+            return Json(readAllBankDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetBankDetails([FromBody] int bankID)
+        {
+            Bank accountDetails = await _generalLedgerAccountsQuery.GetBankDetails(bankID);
+            ReadBankDetailsDto readBankDetailsDto = _mapper.Map<ReadBankDetailsDto>(accountDetails);
+            return Json(readBankDetailsDto);
+        }
+        public IActionResult DeleteBank([FromBody] int bankID)
+        {
+            bool IsBankDeleted = _generalLedgerAccountsCommand.DeleteBank(bankID);
+
+            if (IsBankDeleted)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+                return Json(new { status = true, responce = "Account deleted successfully." });
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Cannot delete the account because it has associated sub-accounts." });
+            }
+        }
+
+        public async Task<IActionResult> CreateUpdateBank([FromBody] CreateUpdateBankDto createUpdateBankDto)
+        {
+            Bank bankModel = _mapper.Map<Bank>(createUpdateBankDto);
+
+            bool createUpdateBank = _generalLedgerAccountsCommand.CreateUpdateBank(bankModel);
+
+
+            if (createUpdateBank)
+            {
+                _generalLedgerAccountsCommand.SaveChanges();
+
+                //AccountDetail accountDetails = await _generalLedgerAccountsQuery.GetAccountClassName(accountModel);
+
+                CreateUpdateBankReadDto createUpdateBankReadDto = _mapper.Map<CreateUpdateBankReadDto>(bankModel);
+                return Json(createUpdateBankReadDto);
+            }
+            else
+            {
+                return Json(new { status = false, responce = "Could Not Create account" });
+            }
+        }
+
+
+        //CASHIER SHIFTS
+        public IActionResult CashierShifts()
+        {
+            return View();
+        }
+
+
+
+
     }
 }

@@ -60,7 +60,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Accounts}/{action=PaymentModes}/{id?}");
+    pattern: "{controller=Accounts}/{action=CashierShifts}/{id?}");
 app.MapRazorPages();
 
 app.Run();
